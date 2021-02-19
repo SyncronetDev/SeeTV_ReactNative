@@ -1,5 +1,6 @@
 import React from 'react';
 import {SafeAreaView, ScrollView, View, Text, StyleSheet} from 'react-native';
+import {withTranslation} from 'react-i18next';
 
 class TVGuidePage extends React.Component {
   render() {
@@ -84,3 +85,5 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
 });
+
+export default withTranslation()(TVGuidePage);

@@ -15,11 +15,15 @@ import {
 } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {AppearanceProvider, useColorScheme} from 'react-native-appearance';
-
-const TVGuidePage = React.lazy(() => import('./pages/TVGuidePage'));
+import {I18nextProvider} from 'react-i18next';
+import i18n from './i18n';
+import TVGuidePage from './pages/TVGuidePage';
 
 const Stack = createStackNavigator();
 
+// The entry point using a react navigation stack navigation
+// gets wrapped by the I18nextProvider enabling using translations
+// https://github.com/i18next/react-i18next#i18nextprovider
 const App: () => React$Node = () => {
   const scheme = useColorScheme();
 
@@ -30,7 +34,9 @@ const App: () => React$Node = () => {
       />
       <NavigationContainer theme={scheme === 'dark' ? theme.dark : theme.light}>
         <Stack.Navigator>
-          <Stack.Screen name="TVGuide" component={TVGuidePage} />
+          <I18nextProvider i18n={i18n}>
+            <Stack.Screen Name="TVGuide" component={TVGuidePage} />
+          </I18nextProvider>
         </Stack.Navigator>
       </NavigationContainer>
     </AppearanceProvider>
