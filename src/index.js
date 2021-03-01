@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { DrawerActions, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, openDrawer } from '@react-navigation/drawer';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Streamer from './pages/Streamer';
@@ -17,58 +18,67 @@ class App extends Component {
   render() {
     return (
       <NavigationContainer>
-        <Drawer.Navigator
-          headerShown={true}
-          screenOptions={{
-            headerRight: () => <Button title="info" color="#A60402" />,
-          }}
-        >
-          <Drawer.Screen name="Login" component={Login} headerShown={true} />
-          <Drawer.Screen name="Home" component={HomeStack} />
+        <Drawer.Navigator>
+          <Drawer.Screen
+            name="Login"
+            component={LoginStack}
+            options={({ navigation }) => ({
+              title: 'Products',
+              drawerIcon: ({ focused, size }) => <Icon name="rocket" size={30} color="#900" />,
+              headerLeftContainerStyle: { paddingLeft: 10 },
+            })}
+          />
+          <Drawer.Screen
+            name="Home"
+            component={() => (
+              <Stack.Navigator screenOptions={Header}>
+                <Stack.Screen name="Home" component={Home} />
+                <Stack.Screen
+                  name="Streamer"
+                  component={Streamer}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen name="Viewer" component={Viewer} />
+              </Stack.Navigator>
+            )}
+          />
         </Drawer.Navigator>
       </NavigationContainer>
     );
   }
 }
-/*
-const Header = {
-  screenOptions = {{}}
-}*/
-
-/*
-    screenOptions={{
-      headerShown: true,
-      headerLeft: () => <Button title="info" color="#AAAAAA" />,
-    }}
-  )
+const Header = ({ navigation }) => ({
+  headerShown: true,
+  headerLeft: () => <Button title="info" color="#AAAAAA" onPress={() => navigation.openDrawer()} />,
+});
+/*function Header({ navigation }) {
+  return {
+    headerShown: true,
+    headerLeft: () => (
+      <Button title="info" color="#AAAAAA" onPress={() => navigation.openDrawer()} />
+    ),
+  };
 }*/
 
 export default App;
 
+/*
 function HomeStack() {
+  //screenOptions={Header(navigation)}
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: true,
-        headerLeft: () => <Button title="info" color="#AAAAAA" />,
-      }}
-    >
+    <Stack.Navigator screenOptions={Header}>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Streamer" component={Streamer} options={{ headerShown: false }} />
       <Stack.Screen name="Viewer" component={Viewer} />
     </Stack.Navigator>
   );
-}
+}*/
 
-function LoginStack() {
-  <Stack.Navigator
-    screenOptions={{
-      headerShown: true,
-      headerLeft: () => <Button title="info" color="#AAAAAA" />,
-    }}
-  >
-    <Stack.Screen name="Home" component={Home} />
-    <Stack.Screen name="Streamer" component={Streamer} options={{ headerShown: false }} />
-    <Stack.Screen name="Viewer" component={Viewer} />
-  </Stack.Navigator>;
-}
+const LoginStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="Login" component={Login} headerShown={true} />
+  </Stack.Navigator>
+);
+/*screenOptions={({ navigation }) => ({
+      headerRight: () => <HeaderRight navigation={navigation} />,
+    })}*/
