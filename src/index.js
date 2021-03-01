@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import { Button } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { DrawerActions, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, openDrawer } from '@react-navigation/drawer';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { Provider as PaperProvider } from 'react-native-paper';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Streamer from './pages/Streamer';
 import Viewer from './pages/Viewer';
+import theme from './theme';
+import { Appbar } from 'react-native-paper';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -17,41 +20,92 @@ class App extends Component {
 
   render() {
     return (
-      <NavigationContainer>
-        <Drawer.Navigator>
-          <Drawer.Screen
-            name="Login"
-            component={LoginStack}
-            options={({ navigation }) => ({
-              title: 'Products',
-              drawerIcon: ({ focused, size }) => <Icon name="rocket" size={30} color="#900" />,
-              headerLeftContainerStyle: { paddingLeft: 10 },
-            })}
-          />
-          <Drawer.Screen
-            name="Home"
-            component={() => (
-              <Stack.Navigator screenOptions={Header}>
-                <Stack.Screen name="Home" component={Home} />
-                <Stack.Screen
-                  name="Streamer"
-                  component={Streamer}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen name="Viewer" component={Viewer} />
-              </Stack.Navigator>
-            )}
-          />
-        </Drawer.Navigator>
-      </NavigationContainer>
+      <PaperProvider theme={theme}>
+        <NavigationContainer>
+          <Drawer.Navigator
+            headerMode="screen"
+            screenOptions={{
+              header: ({ scene, previous, navigation }) => (
+                <Header scene={scene} previous={previous} navigation={navigation} />
+              ),
+            }}
+          >
+            <Drawer.Screen name="Login" component={LoginStack} />
+            <Drawer.Screen name="HomeStack" component={HomeStack} />
+          </Drawer.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
     );
   }
 }
-const Header = ({ navigation }) => ({
+
+const Header = ({ scene, navigation, previous }) => {
+  const { options } = scene.descriptor;
+  const title =
+    options.headerTitle !== undefined
+      ? options.headerTitle
+      : options.title !== undefined
+      ? options.title
+      : scene.route.name;
+
+  return (
+    <Appbar.Header theme={{ colors: { primary: theme.colors.surface } }} style={{ height: 56 }}>
+      {previous ? (
+        <Appbar.BackAction onPress={navigation.pop} color={theme.colors.primary} />
+      ) : (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.openDrawer();
+          }}
+        >
+          <MaterialIcons name="menu" size={24} style={{ paddingLeft: 8, paddingRight: 16 }} />
+        </TouchableOpacity>
+      )}
+      <Appbar.Content title={title} size={16} style={{ paddingLeft: 0, marginLeft: 0 }} />
+    </Appbar.Header>
+  );
+};
+/*
+<Drawer.Screen
+              name="Login"
+              component={LoginStack}
+              options={({ navigation }) => ({
+                title: 'Products',
+                drawerIcon: ({ focused, size }) => (
+                  <MaterialIcons name="login" size={30} color="#900" />
+                ),
+                headerLeftContainerStyle: { paddingLeft: 10 },
+              })}
+            />
+<Drawer.Screen
+              name="Home"
+              component={() => (
+                <Stack.Navigator screenOptions={Header}>
+                  <Stack.Screen name="Home" component={Home} />
+                  <Stack.Screen
+                    name="Streamer"
+                    component={Streamer}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen name="Viewer" component={Viewer} />
+                </Stack.Navigator>
+              )}
+            />
+
+
+
+
+
+
+
+
+
+*/
+/*const Header = ({ navigation }) => ({
   headerShown: true,
   headerLeft: () => <Button title="info" color="#AAAAAA" onPress={() => navigation.openDrawer()} />,
 });
-/*function Header({ navigation }) {
+function Header({ navigation }) {
   return {
     headerShown: true,
     headerLeft: () => (
@@ -62,20 +116,33 @@ const Header = ({ navigation }) => ({
 
 export default App;
 
-/*
 function HomeStack() {
   //screenOptions={Header(navigation)}
   return (
-    <Stack.Navigator screenOptions={Header}>
+    <Stack.Navigator
+      headerMode="screen"
+      screenOptions={{
+        header: ({ scene, previous, navigation }) => (
+          <Header scene={scene} previous={previous} navigation={navigation} />
+        ),
+      }}
+    >
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Streamer" component={Streamer} options={{ headerShown: false }} />
       <Stack.Screen name="Viewer" component={Viewer} />
     </Stack.Navigator>
   );
-}*/
+}
 
 const LoginStack = () => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    headerMode="screen"
+    screenOptions={{
+      header: ({ scene, previous, navigation }) => (
+        <Header scene={scene} previous={previous} navigation={navigation} />
+      ),
+    }}
+  >
     <Stack.Screen name="Login" component={Login} headerShown={true} />
   </Stack.Navigator>
 );

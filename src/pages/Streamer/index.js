@@ -27,6 +27,7 @@ export default class Streamer extends React.Component {
     const { route } = props;
     const roomName = get(route, 'params.roomName');
     const userName = get(route, 'params.userName', '');
+    console.log(userName);
     this.state = {
       currentLiveStatus: LIVE_STATUS.PREPARE,
       messages: [],
