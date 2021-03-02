@@ -3,11 +3,15 @@ import PropTypes from 'prop-types';
 import {
   View,
   Image,
+  Text,
   TouchableOpacity,
   SafeAreaView,
   Alert,
   PermissionsAndroid,
   StatusBar,
+  TouchableNativeFeedback,
+  Touchable,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { NodeCameraView } from 'react-native-nodemediaclient';
 import get from 'lodash/get';
@@ -21,6 +25,10 @@ import FloatingHearts from '../../components/FloatingHearts';
 import { RTMP_SERVER } from '../../config';
 import Logger from '../../utils/logger';
 import ActionButton from 'react-native-action-button';
+import { Header } from 'react-native/Libraries/NewAppScreen';
+import { Appbar, TouchableRipple } from 'react-native-paper';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import LottieView from 'lottie-react-native';
 
 export default class Streamer extends React.Component {
   constructor(props) {
@@ -31,9 +39,11 @@ export default class Streamer extends React.Component {
     console.log(userName);
     this.state = {
       currentLiveStatus: LIVE_STATUS.PREPARE,
+      enabledFlash: false,
       messages: [],
       countHeart: 0,
       isVisibleMessages: true,
+      isLive: false,
     };
     this.roomName = roomName;
     this.userName = userName;
@@ -189,6 +199,18 @@ export default class Streamer extends React.Component {
 
     console.log({ outputUrl });
 
+    /*
+    <TouchableOpacity
+              onPress={() => {
+                const { enabledFlash } = this.state;
+                this.setState({ enabledFlash: !enabledFlash });
+                console.log(enabledFlash);
+                this.nodeCameraViewRef.flashEnable(enabledFlash);
+              }}
+            >
+              <MaterialIcons name="close" size={24} color="white" />
+            </TouchableOpacity>
+            */
     return (
       <SafeAreaView style={styles.container}>
         <StatusBar hidden />
@@ -196,37 +218,60 @@ export default class Streamer extends React.Component {
           style={styles.streamerView}
           ref={this.setCameraRef}
           outputUrl={outputUrl}
-          camera={{ cameraId: 0, cameraFrontMirror: false }}
+          camera={{ cameraId: 0, cameraFrontMirror: true }}
           audio={audioConfig}
           video={videoConfig}
           smoothSkinLevel={3}
           autopreview={true}
         />
+
         <SafeAreaView style={styles.contentWrapper}>
           <View style={styles.header}>
             <TouchableOpacity style={styles.btnClose} onPress={this.onPressClose}>
-              <Image
-                style={styles.icoClose}
-                source={require('../../assets/close.png')}
-                tintColor="white"
-              />
+              <MaterialIcons name="close" size={24} color="white" />
             </TouchableOpacity>
-            <ActionButton
-              buttonColor="#9b59b6"
-              title="Reverse Camera"
-              onPress={() => {
-                this.nodeCameraViewRef.switchCamera();
-              }}
-            ></ActionButton>
             <LiveStreamActionButton
               currentLiveStatus={currentLiveStatus}
               onPress={this.onPressLiveStreamButton}
             />
           </View>
+          <View style={styles.sideBarRight}>
+            <TouchableOpacity
+              onPress={() => {
+                this.nodeCameraViewRef.switchCamera();
+              }}
+            >
+              <MaterialIcons name="flip-camera-android" size={24} color="white" />
+            </TouchableOpacity>
+          </View>
         </SafeAreaView>
       </SafeAreaView>
     );
     /*
+<View style={styles.btnStartStop}>
+            <TouchableWithoutFeedback
+              style={styles.btnStartStop}
+              onPress={() => {
+                this.nodeCameraViewRef.switchCamera();
+                if (this.state.isLive) {
+                  this.btn_record.play(0, 150);
+                } else {
+                  this.btn_record.play(151, 241);
+                }
+              }}
+            >
+              <LottieView
+                ref={(animation) => {
+                  this.btn_record = animation;
+                }}
+                source={require('../../assets/Streaming/recordstop-button.json')}
+                loop={false}
+              ></LottieView>
+            </TouchableWithoutFeedback>
+          </View>
+    */
+    /* 
+              <MaterialIcons name="fiber-manual-record" size={48} color="red" />
 <SafeAreaView style={styles.contentWrapper}>
           <View style={styles.header}>
             <TouchableOpacity style={styles.btnClose} onPress={this.onPressClose}>
