@@ -4,6 +4,8 @@ import {
   View,
   Image,
   Text,
+  Animated,
+  Easing,
   TouchableOpacity,
   SafeAreaView,
   Alert,
@@ -44,6 +46,7 @@ export default class Streamer extends React.Component {
       countHeart: 0,
       isVisibleMessages: true,
       isLive: false,
+      btnStartStopProgress: new Animated.Value(0),
     };
     this.roomName = roomName;
     this.userName = userName;
@@ -74,6 +77,12 @@ export default class Streamer extends React.Component {
       const messages = get(data, 'messages', []);
       this.setState({ messages });
     });
+
+    Animated.timing(this.state.btnStartStopProgress, {
+      toValue: 1,
+      duration: 5000,
+      easing: Easing.linear,
+    }).start();
   }
 
   componentWillUnmount() {
@@ -226,24 +235,50 @@ export default class Streamer extends React.Component {
         />
 
         <SafeAreaView style={styles.contentWrapper}>
-          <View style={styles.header}>
-            <TouchableOpacity style={styles.btnClose} onPress={this.onPressClose}>
-              <MaterialIcons name="close" size={24} color="white" />
-            </TouchableOpacity>
-            <LiveStreamActionButton
-              currentLiveStatus={currentLiveStatus}
-              onPress={this.onPressLiveStreamButton}
-            />
+          <View>
+            <View style={styles.header}>
+              <TouchableOpacity style={styles.btnClose} onPress={this.onPressClose}>
+                <MaterialIcons name="close" size={24} color="white" />
+              </TouchableOpacity>
+              <LiveStreamActionButton
+                currentLiveStatus={currentLiveStatus}
+                onPress={this.onPressLiveStreamButton}
+              />
+            </View>
+            <View style={styles.sideBarRight}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.nodeCameraViewRef.switchCamera();
+                }}
+              >
+                <MaterialIcons name="flip-camera-android" size={24} color="white" />
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.sideBarRight}>
-            <TouchableOpacity
-              onPress={() => {
-                this.nodeCameraViewRef.switchCamera();
+          <TouchableWithoutFeedback
+            style={styles.btnStartStop}
+            progress={this.state.btnStartStopProgress}
+            onPress={() => {
+              const { isLive } = this.state;
+              if (!this.state.isLive) {
+                this.setState({ btnStartStopProgress: 150 });
+                this.onPressLiveStreamButton();
+                this.setState({ isLive: !isLive });
+              } else {
+                this.onPressClose();
+              }
+            }}
+          >
+            <LottieView
+              style={styles.btnStartStop}
+              ref={(animation) => {
+                this.btn_record = animation;
               }}
-            >
-              <MaterialIcons name="flip-camera-android" size={24} color="white" />
-            </TouchableOpacity>
-          </View>
+              source={require('../../assets/Streaming/recordstop-button.json')}
+              loop={false}
+              progress={1}
+            ></LottieView>
+          </TouchableWithoutFeedback>
         </SafeAreaView>
       </SafeAreaView>
     );

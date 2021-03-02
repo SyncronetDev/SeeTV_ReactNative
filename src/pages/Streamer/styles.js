@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { LayoutAnimation, StyleSheet } from 'react-native';
 import * as Utility from '../../utils/utility';
 
 const styles = StyleSheet.create({
@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#3498db',
   },
-  contentWrapper: { flex: 1 },
+  contentWrapper: { flex: 1, justifyContent: 'space-between' },
   header: {
     height: 56,
     justifyContent: 'space-around',
@@ -30,7 +30,23 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
-  btnStartStop: { backgroundColor: 'blue', alignSelf: 'center', width: '25%', height: '25%' },
+  containerStartStop: {
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    backgroundColor: 'black',
+    flexWrap: 'wrap',
+    width: 'auto',
+    height: 'auto',
+  },
+  btnStartStop: {
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    alignSelf: 'center',
+    width: 250,
+    height: 250,
+    bottom: -20,
+    padding: 0,
+  },
   btnClose: {
     position: 'absolute',
     top: 12,
