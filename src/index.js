@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { DrawerActions, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator, openDrawer } from '@react-navigation/drawer';
+import {
+  createDrawerNavigator,
+  openDrawer,
+  DrawerContentItem,
+  DrawerItem,
+  DrawerContentScrollView,
+} from '@react-navigation/drawer';
 import { Provider as PaperProvider } from 'react-native-paper';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Login from './pages/Login';
@@ -22,14 +28,7 @@ class App extends Component {
     return (
       <PaperProvider theme={theme}>
         <NavigationContainer>
-          <Drawer.Navigator
-            headerMode="screen"
-            screenOptions={{
-              header: ({ scene, previous, navigation }) => (
-                <Header scene={scene} previous={previous} navigation={navigation} />
-              ),
-            }}
-          >
+          <Drawer.Navigator drawerContent={(props) => <CloseDrawerElement {...props} />}>
             <Drawer.Screen name="Login" component={LoginStack} />
             <Drawer.Screen name="HomeStack" component={HomeStack} />
           </Drawer.Navigator>
@@ -38,6 +37,44 @@ class App extends Component {
     );
   }
 }
+
+const CloseDrawerElement = (props) => {
+  const { state, descriptors, navigation } = props;
+  let lastGroupName = '';
+  let newGroup = true;
+  return (
+    <SafeAreaView>
+      <DrawerContentScrollView {...props}>
+        {state.routes.map((route) => {
+          const { drawerLabel, activeTintColor, groupName } = descriptors[route.key].options;
+          if (lastGroupName !== groupName) {
+            newGroup = true;
+            lastGroupName = groupName;
+          } else newGroup = false;
+          return (
+            <>
+              {newGroup ? (
+                <View>
+                  <Text key={groupName} style={{ marginLeft: 16 }}>
+                    {groupName}
+                  </Text>
+                  <View />
+                </View>
+              ) : null}
+              <DrawerItem
+                key={route.key}
+                label={({ color }) => <Text style={{ color }}>{drawerLabel}</Text>}
+                focused={state.routes.findIndex((e) => e.name === route.name) === state.index}
+                activeTintColor={activeTintColor}
+                onPress={() => navigation.navigate(route.name)}
+              />
+            </>
+          );
+        })}
+      </DrawerContentScrollView>
+    </SafeAreaView>
+  );
+};
 
 const Header = ({ scene, navigation, previous }) => {
   const { options } = scene.descriptor;
@@ -122,9 +159,7 @@ function HomeStack() {
     <Stack.Navigator
       headerMode="screen"
       screenOptions={{
-        header: ({ scene, previous, navigation }) => (
-          <Header scene={scene} previous={previous} navigation={navigation} />
-        ),
+        header: Header,
       }}
     >
       <Stack.Screen name="Home" component={Home} />
@@ -138,9 +173,7 @@ const LoginStack = () => (
   <Stack.Navigator
     headerMode="screen"
     screenOptions={{
-      header: ({ scene, previous, navigation }) => (
-        <Header scene={scene} previous={previous} navigation={navigation} />
-      ),
+      header: Header,
     }}
   >
     <Stack.Screen name="Login" component={Login} headerShown={true} />
@@ -149,3 +182,7 @@ const LoginStack = () => (
 /*screenOptions={({ navigation }) => ({
       headerRight: () => <HeaderRight navigation={navigation} />,
     })}*/
+
+/* ({ scene, previous, navigation }) => (
+          <Header scene={scene} previous={previous} navigation={navigation} />
+        ) */

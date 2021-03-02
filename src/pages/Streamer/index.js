@@ -20,6 +20,7 @@ import MessagesList from '../../components/MessagesList/MessagesList';
 import FloatingHearts from '../../components/FloatingHearts';
 import { RTMP_SERVER } from '../../config';
 import Logger from '../../utils/logger';
+import ActionButton from 'react-native-action-button';
 
 export default class Streamer extends React.Component {
   constructor(props) {
@@ -210,6 +211,13 @@ export default class Streamer extends React.Component {
                 tintColor="white"
               />
             </TouchableOpacity>
+            <ActionButton
+              buttonColor="#9b59b6"
+              title="Reverse Camera"
+              onPress={() => {
+                this.nodeCameraViewRef.switchCamera();
+              }}
+            ></ActionButton>
             <LiveStreamActionButton
               currentLiveStatus={currentLiveStatus}
               onPress={this.onPressLiveStreamButton}
