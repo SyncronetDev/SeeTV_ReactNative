@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
 import styles from './styles';
+import { DrawerActions } from '@react-navigation/native';
 
 class Login extends React.Component {
   constructor() {
@@ -17,7 +18,10 @@ class Login extends React.Component {
     const {
       navigation: { navigate },
     } = this.props;
-    return navigate('Home', { userName });
+    return navigate('HomeStack', {
+      screen: 'Home',
+      params: { userName },
+    }); //.navigate('Home', { userName });
   };
 
   onChangeUserName = (userName) => this.setState({ userName });
