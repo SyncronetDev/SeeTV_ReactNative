@@ -1,26 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { RefreshControl, Text, TouchableOpacity, SafeAreaView, FlatList } from 'react-native';
 import get from 'lodash/get';
-import SocketManager from '../../socketManager';
-import styles from './styles';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { FlatList, RefreshControl, SafeAreaView, Text, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
 import LiveStreamCard from './LiveStreamCard';
-import { openDrawer } from '@react-navigation/drawer';
+import styles from './styles';
 
 class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    //const [refreshing, setRefreshing] = React.useState(false);
-    this.state = {
-      refreshing: false,
-      listLiveStream: [],
-    };
-  }
+  state = {
+    refreshing: false,
+    listLiveStream: [],
+  };
 
   async componentDidMount() {
     const streams = await this.fetchStreams();
 
-    this.setState({ listLiveStream: streams });
+    this.setState({
+      listLiveStream: streams,
+    });
   }
 
   onPressLiveStreamNow = () => {
@@ -67,16 +64,16 @@ class Home extends React.Component {
   refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh()} />}*/
 
   render() {
-    const { route } = this.props;
+    const { route, user } = this.props;
+    console.log({ user });
     const userName = get(route, 'params.userName', 'Default');
     const { listLiveStream } = this.state;
-    const refreshing = this.state;
 
-    console.dir(listLiveStream);
-    console.log(userName);
+    // console.dir(listLiveStream);
+    // console.log(userName);
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.welcomeText}>Welcome : {userName}</Text>
+        <Text style={styles.welcomeText}>Welcome : {user.username}</Text>
         <Text style={styles.title}>List live stream video</Text>
         <FlatList
           refreshControl={
@@ -105,4 +102,9 @@ Home.defaultProps = {
   route: null,
 };
 
-export default Home;
+const mapStateToProps = (state) => {
+  const { user } = state;
+  return { user };
+};
+
+export default connect(mapStateToProps)(Home);

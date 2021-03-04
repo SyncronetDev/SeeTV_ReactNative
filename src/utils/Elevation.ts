@@ -1,0 +1,10 @@
+export declare const red50 = '#ffebee';
+export declare const red100 = '#ffcdd2';
+export declare const red200 = '#ef9a9a';
+export declare const red300 = '#e57373';
+export declare const red400 = '#ef5350';
+export declare const red500 = '#f44336';
+export declare const red600 = '#e53935';
+export declare const red700 = '#d32f2f';
+export declare const red800 = '#c62828';
+export declare const red900 = '#b71c1c';

@@ -162,7 +162,7 @@ export default class Viewer extends Component {
 
   renderNodePlayerView = () => {
     const { inputUrl } = this.state;
-    console.log(inputUrl);
+    // console.log(inputUrl);
     if (!inputUrl) return null;
     return (
       <NodePlayerView
@@ -219,11 +219,8 @@ export default class Viewer extends Component {
     }
     /**
      * Viewer mode
-     */
-    return (
-      <View style={styles.container}>
-        {this.renderBackgroundColors()}
-        {this.renderNodePlayerView()}
+     * {this.renderBackgroundColors()}
+     * {this.renderNodePlayerView()}
         {this.renderChatGroup()}
         {this.renderListMessages()}
         <TouchableOpacity style={styles.btnClose} onPress={this.onPressClose}>
@@ -234,8 +231,8 @@ export default class Viewer extends Component {
           />
         </TouchableOpacity>
         <FloatingHearts count={countHeart} />
-      </View>
-    );
+     */
+    return <View style={styles.container}>{this.renderNodePlayerView()}</View>;
   }
 }
 

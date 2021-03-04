@@ -1,14 +1,11 @@
 import Header from './Header';
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from './../Home/index';
-import Streamer from './../Streamer/index';
-import Viewer from './../Viewer/index';
+import Login from '../Login/index';
 
 const Stack = createStackNavigator();
 
-export default function HomeStack() {
-  //screenOptions={Header(navigation)}
+export default function LoginStack() {
   return (
     <Stack.Navigator
       headerMode="screen"
@@ -18,9 +15,7 @@ export default function HomeStack() {
         ),
       }}
     >
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Streamer" component={Streamer} options={{ headerShown: false }} />
-      <Stack.Screen name="Viewer" component={Viewer} />
+      <Stack.Screen name="Login" component={Login} headerShown={true} />
     </Stack.Navigator>
   );
 }

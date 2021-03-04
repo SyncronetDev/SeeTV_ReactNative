@@ -1,184 +1,117 @@
-import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { DrawerActions, NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import {
   createDrawerNavigator,
-  openDrawer,
-  DrawerContentItem,
-  DrawerItem,
   DrawerContentScrollView,
+  DrawerItem,
+  DrawerItemList,
 } from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native';
+import React, { Component } from 'react';
+import { Appearance, Dimensions } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Login from './pages/Login';
-import Home from './pages/Home';
-import Streamer from './pages/Streamer';
-import Viewer from './pages/Viewer';
-import theme from './theme';
-import { Appbar } from 'react-native-paper';
+import HomeStack from './pages/Routes/HomeStack';
+import LoginStack from './pages/Routes/LoginStack';
+import apptheme from './theme';
+import { Provider } from 'react-redux';
+import { store } from './store/auth';
 
 const Drawer = createDrawerNavigator();
-const Stack = createStackNavigator();
 
 class App extends Component {
-  componentDidMount() {}
-
   render() {
+    const width = Dimensions.get('window').width;
+    const isLargeScreen = width >= 768;
     return (
-      <PaperProvider theme={theme}>
-        <NavigationContainer>
-          <Drawer.Navigator drawerContent={(props) => <CloseDrawerElement {...props} />}>
-            <Drawer.Screen name="Login" component={LoginStack} />
-            <Drawer.Screen name="HomeStack" component={HomeStack} />
-          </Drawer.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
+      <Provider store={store}>
+        <PaperProvider
+          theme={Appearance.getColorScheme() === 'dark' ? apptheme.dark : apptheme.default}
+        >
+          <NavigationContainer
+            theme={Appearance.getColorScheme() === 'dark' ? apptheme.dark : apptheme.default}
+          >
+            <Drawer.Navigator
+              theme={Appearance.getColorScheme() === 'dark' ? apptheme.dark : apptheme.default}
+              drawerContent={(props) => <CustomDrawerContent {...props} />}
+              drawerType="front"
+              drawerStyle={{
+                backgroundColor:
+                  Appearance.getColorScheme() === 'dark'
+                    ? apptheme.dark.colors.drawer
+                    : apptheme.default.colors.drawer,
+              }}
+              overlayColor="rgba(0,0,0,0.5)"
+              initialRouteName="Login"
+            >
+              <Drawer.Screen
+                name="HomeStack"
+                component={HomeStack}
+                options={{
+                  drawerIcon: ({ color, size }) => (
+                    <MaterialIcons name="menu" size={size} color={color} />
+                  ),
+                }}
+              />
+              <Drawer.Screen
+                name="Login"
+                component={LoginStack}
+                drawerType={isLargeScreen ? 'permanent' : 'back'}
+                options={{
+                  drawerIcon: ({ color, size }) => (
+                    <MaterialIcons name="menu" size={size} color={color} />
+                  ),
+                }}
+              />
+            </Drawer.Navigator>
+          </NavigationContainer>
+        </PaperProvider>
+      </Provider>
     );
   }
 }
 
-const CloseDrawerElement = (props) => {
-  const { state, descriptors, navigation } = props;
-  let lastGroupName = '';
-  let newGroup = true;
-  return (
-    <SafeAreaView>
-      <DrawerContentScrollView {...props}>
-        {state.routes.map((route) => {
-          const { drawerLabel, activeTintColor, groupName } = descriptors[route.key].options;
-          if (lastGroupName !== groupName) {
-            newGroup = true;
-            lastGroupName = groupName;
-          } else newGroup = false;
-          return (
-            <>
-              {newGroup ? (
-                <View>
-                  <Text key={groupName} style={{ marginLeft: 16 }}>
-                    {groupName}
-                  </Text>
-                  <View />
-                </View>
-              ) : null}
-              <DrawerItem
-                key={route.key}
-                label={({ color }) => <Text style={{ color }}>{drawerLabel}</Text>}
-                focused={state.routes.findIndex((e) => e.name === route.name) === state.index}
-                activeTintColor={activeTintColor}
-                onPress={() => navigation.navigate(route.name)}
-              />
-            </>
-          );
-        })}
-      </DrawerContentScrollView>
-    </SafeAreaView>
-  );
-};
-
-const Header = ({ scene, navigation, previous }) => {
-  const { options } = scene.descriptor;
-  const title =
-    options.headerTitle !== undefined
-      ? options.headerTitle
-      : options.title !== undefined
-      ? options.title
-      : scene.route.name;
-
-  return (
-    <Appbar.Header theme={{ colors: { primary: theme.colors.surface } }} style={{ height: 56 }}>
-      {previous ? (
-        <Appbar.BackAction onPress={navigation.pop} color={theme.colors.primary} />
-      ) : (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.openDrawer();
-          }}
-        >
-          <MaterialIcons name="menu" size={24} style={{ paddingLeft: 8, paddingRight: 16 }} />
-        </TouchableOpacity>
-      )}
-      <Appbar.Content title={title} size={16} style={{ paddingLeft: 0, marginLeft: 0 }} />
-    </Appbar.Header>
-  );
-};
 /*
-<Drawer.Screen
-              name="Login"
-              component={LoginStack}
-              options={({ navigation }) => ({
-                title: 'Products',
-                drawerIcon: ({ focused, size }) => (
-                  <MaterialIcons name="login" size={30} color="#900" />
-                ),
-                headerLeftContainerStyle: { paddingLeft: 10 },
-              })}
-            />
-<Drawer.Screen
-              name="Home"
-              component={() => (
-                <Stack.Navigator screenOptions={Header}>
-                  <Stack.Screen name="Home" component={Home} />
-                  <Stack.Screen
-                    name="Streamer"
-                    component={Streamer}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen name="Viewer" component={Viewer} />
-                </Stack.Navigator>
-              )}
-            />
-
-
-
-
-
-
-
-
-
+{isSignedIn ? (
+              //Guest
+              <Drawer.Screen
+                name="HomeStack"
+                component={HomeStack}
+                options={{
+                  drawerIcon: ({ color, size }) => (
+                    <MaterialIcons name="menu" size={size} color={color} />
+                  ),
+                }}
+              />
+            ) : (
+              //Viewer
+              <Drawer.Screen
+                name="Login"
+                component={LoginStack}
+                drawerType={isLargeScreen ? 'permanent' : 'back'}
+                options={{
+                  drawerIcon: ({ color, size }) => (
+                    <MaterialIcons name="menu" size={size} color={color} />
+                  ),
+                }}
+              />
+            )}
 */
-/*const Header = ({ navigation }) => ({
-  headerShown: true,
-  headerLeft: () => <Button title="info" color="#AAAAAA" onPress={() => navigation.openDrawer()} />,
-});
-function Header({ navigation }) {
-  return {
-    headerShown: true,
-    headerLeft: () => (
-      <Button title="info" color="#AAAAAA" onPress={() => navigation.openDrawer()} />
-    ),
-  };
-}*/
 
-export default App;
-
-function HomeStack() {
-  //screenOptions={Header(navigation)}
+function CustomDrawerContent(props) {
+  // console.log(colors);
   return (
-    <Stack.Navigator
-      headerMode="screen"
-      screenOptions={{
-        header: Header,
-      }}
-    >
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Streamer" component={Streamer} options={{ headerShown: false }} />
-      <Stack.Screen name="Viewer" component={Viewer} />
-    </Stack.Navigator>
+    <DrawerContentScrollView {...props}>
+      <DrawerItem
+        label="Close Menu"
+        onPress={() => props.navigation.closeDrawer()}
+        icon={({ color, size }) => <MaterialIcons name="close" size={size} color={color} />}
+      />
+      <DrawerItemList {...props}></DrawerItemList>
+    </DrawerContentScrollView>
   );
 }
 
-const LoginStack = () => (
-  <Stack.Navigator
-    headerMode="screen"
-    screenOptions={{
-      header: Header,
-    }}
-  >
-    <Stack.Screen name="Login" component={Login} headerShown={true} />
-  </Stack.Navigator>
-);
+export default App;
+
 /*screenOptions={({ navigation }) => ({
       headerRight: () => <HeaderRight navigation={navigation} />,
     })}*/
