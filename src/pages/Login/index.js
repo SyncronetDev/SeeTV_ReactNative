@@ -1,20 +1,23 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Alert, Text, TouchableOpacity, View, Image, SafeAreaView } from 'react-native';
-import { TextInput, useTheme, withTheme, Button } from 'react-native-paper';
-import styles from './styles';
-import { login as apiLogin, fetchUser } from '../../utils/api';
-import { signIn } from '../../store/auth';
-import { bindActionCreators } from 'redux';
+import { Alert, Image, SafeAreaView, View } from 'react-native';
+import { Button, TextInput, withTheme } from 'react-native-paper';
 import { connect } from 'react-redux';
-import Triangle from './../../components/Shapes/Triangle';
-import LoginStack from './../Routes/LoginStack';
+import { bindActionCreators } from 'redux';
+import { signIn } from '../../store/auth';
+import { fetchUser, login as apiLogin } from '../../utils/api';
+import styles from './styles';
+import config from '~/config';
 
 class Login extends React.Component {
-  state = {
-    username: 'tbj',
-    password: 'password',
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      username: config.LOGIN_USERNAME,
+      password: config.LOGIN_PASSWORD,
+    };
+  }
 
   onPressLogin = async () => {
     const { username, password } = this.state;
@@ -38,6 +41,7 @@ class Login extends React.Component {
   };
 
   onChangeUserName = (username) => this.setState({ username });
+
   onChangePassword = (password) => this.setState({ password });
 
   render() {

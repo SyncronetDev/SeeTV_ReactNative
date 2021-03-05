@@ -1,8 +1,8 @@
 import { Alert } from 'react-native';
-import { API_SERVER } from '../config';
+import config from '~/config';
 
 export const login = async ({ username, password }) => {
-  const loginResponse = await fetch(`${API_SERVER}/api/Login`, {
+  const loginResponse = await fetch(`${config.API_SERVER}/api/Login`, {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
@@ -21,21 +21,18 @@ export const login = async ({ username, password }) => {
     Alert.alert('', `Forkert kodeord eller email`, [{ text: 'ok' }]);
     return null;
   }
-  //email = 422
+
   const json = await loginResponse.json();
 
-  console.log(loginResponse);
   if (loginResponse.ok) {
     return json.token;
   }
 
   Alert.alert('', `Fejl: ${loginResponse.Error}`, [{ text: 'ok' }]);
-  console.log('ggwsaeg');
-  //throw new Error(json);
 };
 
 export const register = async ({ email, username, password }) => {
-  const registerResponse = await fetch(`${API_SERVER}/api/Register`, {
+  const registerResponse = await fetch(`${config.API_SERVER}/api/Register`, {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
@@ -61,7 +58,7 @@ export const register = async ({ email, username, password }) => {
 };
 
 export const fetchUser = async (token) => {
-  const userResponse = await fetch(`${API_SERVER}/api/User`, {
+  const userResponse = await fetch(`${config.API_SERVER}/api/User`, {
     method: 'GET',
     mode: 'cors',
     cache: 'no-cache',

@@ -1,3 +1,9 @@
-export const SOCKET_IO_SERVER = 'http://rtmp.seetv.dk';
-export const RTMP_SERVER = 'rtmp.seetv.dk';
-export const API_SERVER = 'http://192.168.1.106';
+import { LOGIN_USERNAME, LOGIN_PASSWORD, SOCKET_IO_SERVER, RTMP_SERVER, API_SERVER } from '@env';
+
+export default {
+  LOGIN_USERNAME,
+  LOGIN_PASSWORD,
+  SOCKET_IO_SERVER: SOCKET_IO_SERVER || 'socket.seetv.dk',
+  RTMP_SERVER: RTMP_SERVER || 'rtmp.seetv.dk',
+  API_SERVER: API_SERVER || 'https://api.seetv.dk',
+};
