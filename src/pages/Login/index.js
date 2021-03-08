@@ -16,12 +16,17 @@ import { signIn } from '../../store/auth';
 import { fetchUser, login as apiLogin } from '../../utils/api';
 import Triangle from './../../components/Shapes/Triangle';
 import styles from './styles';
+import config from '~/config';
 
 class Login extends React.Component {
-  state = {
-    username: 'tbj',
-    password: 'password',
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      username: config.LOGIN_USERNAME,
+      password: config.LOGIN_PASSWORD,
+    };
+  }
 
   onPressLogin = async () => {
     const { username, password } = this.state;
@@ -45,6 +50,7 @@ class Login extends React.Component {
   };
 
   onChangeUserName = (username) => this.setState({ username });
+
   onChangePassword = (password) => this.setState({ password });
 
   componentDidMount() {
