@@ -1,14 +1,21 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Alert, Text, TouchableOpacity, View, Image, SafeAreaView } from 'react-native';
-import { TextInput, useTheme, withTheme, Button } from 'react-native-paper';
-import styles from './styles';
-import { login as apiLogin, fetchUser } from '../../utils/api';
-import { signIn } from '../../store/auth';
-import { bindActionCreators } from 'redux';
+import {
+  Alert,
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  SafeAreaView,
+  Text,
+  View,
+} from 'react-native';
+import { Button, TextInput, withTheme } from 'react-native-paper';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { signIn } from '../../store/auth';
+import { fetchUser, login as apiLogin } from '../../utils/api';
 import Triangle from './../../components/Shapes/Triangle';
-import LoginStack from './../Routes/LoginStack';
+import styles from './styles';
 
 class Login extends React.Component {
   state = {
@@ -39,6 +46,22 @@ class Login extends React.Component {
 
   onChangeUserName = (username) => this.setState({ username });
   onChangePassword = (password) => this.setState({ password });
+
+  componentDidMount() {
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidShow);
+  }
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
+  keyboardDidShow(e) {
+    console.log(e);
+  }
+  keyboardDidHide(e) {
+    console.log(e);
+  }
 
   render() {
     const { username, password } = this.state;
@@ -73,6 +96,19 @@ class Login extends React.Component {
             Login
           </Button>
         </View>
+        <KeyboardAvoidingView behavior="position">
+          <Triangle />
+          <View style={styles.bottomRedContainer}>
+            <View style={styles.bottomContainer2Texts}>
+              <Button>
+                <Text style={styles.subtextOnPrimary}>Ny bruger</Text>
+              </Button>
+              <Button>
+                <Text style={styles.subtextOnPrimary}>Glemt kodeord?</Text>
+              </Button>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     );
   }

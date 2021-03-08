@@ -17,6 +17,7 @@ export const login = async ({ username, password }) => {
       password,
     }),
   });
+  //console.log(loginResponse);
   if (loginResponse.status === 422) {
     Alert.alert('', `Forkert kodeord eller email`, [{ text: 'ok' }]);
     return null;
@@ -24,13 +25,13 @@ export const login = async ({ username, password }) => {
   //email = 422
   const json = await loginResponse.json();
 
-  console.log(loginResponse);
+  //console.log(loginResponse);
   if (loginResponse.ok) {
     return json.token;
   }
 
   Alert.alert('', `Fejl: ${loginResponse.Error}`, [{ text: 'ok' }]);
-  console.log('ggwsaeg');
+  //console.log('ggwsaeg');
   //throw new Error(json);
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, TextPropTypes, useWindowDimensions, View } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { StyleSheet, TextPropTypes, useWindowDimensions, View, Appearance } from 'react-native';
+import { Surface, useTheme } from 'react-native-paper';
 
 export default function Triangle() {
   return (
