@@ -1,0 +1,1 @@
+export { default as TVGuide } from './pages/TVGuide';

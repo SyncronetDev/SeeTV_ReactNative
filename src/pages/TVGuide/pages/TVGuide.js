@@ -5,7 +5,7 @@ import { map } from 'lodash';
 import React, { createRef, useState } from 'react';
 import { SafeAreaView, View, StyleSheet, FlatList, Text, ScrollView } from 'react-native';
 import { Searchbar } from 'react-native-paper';
-import FlatListDropDown from './DropdownList';
+import FlatListDropDown from '../components/DropdownList';
 
 export default function TVGuide() {
   const dayList = React.useMemo(
@@ -16,8 +16,6 @@ export default function TVGuide() {
       }),
     []
   );
-
-  console.log({ timesList });
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

@@ -27,6 +27,8 @@ import apptheme from 'app/theme';
 import MaterialIcon from 'components/Icon/index';
 import DrawerContent from './drawerComp/DrawerContent';
 
+import TVGuide from '../pages/TVGuide/pages/TVGuide';
+
 const Drawer = createDrawerNavigator();
 
 export default function App({ navigation }) {
@@ -165,12 +167,14 @@ export default function App({ navigation }) {
                 <Drawer.Screen name="Guide" component={HomeStack} />
                 <Drawer.Screen name="Account" component={AccountStack} />
                 <Drawer.Screen name="Streams" component={StreamsStack} />
+                <Drawer.Screen name="TVGuide" component={TVGuide} />
               </>
             ) : (
               //TV GUIDE
               <>
                 <Drawer.Screen name="Guide" component={HomeStack} />
                 <Drawer.Screen name="Login" component={LoginStack} />
+                <Drawer.Screen name="TVGuide" component={TVGuide} />
               </>
             )}
           </Drawer.Navigator>

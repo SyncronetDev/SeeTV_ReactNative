@@ -126,6 +126,14 @@ export default function DrawerContent(props) {
             communityIcon={true}
             style={{ marginTop: 0 }}
           />
+          <MDDrawerListItem
+            {...props}
+            title="TVGuide"
+            route="TVGuide"
+            icon="television-guide"
+            communityIcon={true}
+            style={{ marginTop: 0 }}
+          />
         </View>
       )}
       {/* {<DrawerItemList {...props}></DrawerItemList>} */}
