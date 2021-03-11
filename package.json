@@ -23,7 +23,7 @@
     "install": "^0.13.0",
     "lodash": "^4.17.15",
     "lottie-react-native": "^3.5.0",
-    "moment": "^2.25.1",
+    "moment": "^2.29.1",
     "npm": "^7.6.0",
     "prettier": "^2.2.1",
     "prop-types": "^15.7.2",
