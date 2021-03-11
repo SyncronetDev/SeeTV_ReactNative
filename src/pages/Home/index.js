@@ -2,9 +2,10 @@ import get from 'lodash/get';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { FlatList, RefreshControl, SafeAreaView, Text, TouchableOpacity } from 'react-native';
-import { connect } from 'react-redux';
+
 import LiveStreamCard from './LiveStreamCard';
 import styles from './styles';
+import AuthContext from '../../store/AuthContext';
 
 class Home extends React.Component {
   state = {
@@ -65,46 +66,38 @@ class Home extends React.Component {
 
   render() {
     const { route, user } = this.props;
-    console.log({ user });
-    const userName = get(route, 'params.userName', 'Default');
+    // console.log({ user });
+    const userName = "get(route, 'params.userName', 'Default');";
     const { listLiveStream } = this.state;
 
     // console.dir(listLiveStream);
     // console.log(userName);
     return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.welcomeText}>Welcome : {user.username}</Text>
-        <Text style={styles.title}>List live stream video</Text>
-        <FlatList
-          refreshControl={
-            <RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />
-          }
-          contentContainerStyle={styles.flatList}
-          data={listLiveStream}
-          renderItem={({ item }) => <LiveStreamCard data={item} onPress={this.onPressCardItem} />}
-        />
-        <TouchableOpacity style={styles.liveStreamButton} onPress={this.onPressLiveStreamNow}>
-          <Text style={styles.textButton}>LiveStream Now</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
+      <AuthContext.Consumer>
+        {(authcontext) => {
+          return (
+            <SafeAreaView style={styles.container}>
+              <Text style={styles.welcomeText}>Welcome : {authcontext.user().username}</Text>
+              <Text style={styles.title}>List live stream video</Text>
+              <FlatList
+                refreshControl={
+                  <RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />
+                }
+                contentContainerStyle={styles.flatList}
+                data={listLiveStream}
+                renderItem={({ item }) => (
+                  <LiveStreamCard data={item} onPress={this.onPressCardItem} />
+                )}
+              />
+              <TouchableOpacity style={styles.liveStreamButton} onPress={this.onPressLiveStreamNow}>
+                <Text style={styles.textButton}>LiveStream Now</Text>
+              </TouchableOpacity>
+            </SafeAreaView>
+          );
+        }}
+      </AuthContext.Consumer>
     );
   }
 }
 
-Home.propTypes = {
-  route: PropTypes.shape({}),
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func,
-  }).isRequired,
-};
-
-Home.defaultProps = {
-  route: null,
-};
-
-const mapStateToProps = (state) => {
-  const { user } = state;
-  return { user };
-};
-
-export default connect(mapStateToProps)(Home);
+export default Home;

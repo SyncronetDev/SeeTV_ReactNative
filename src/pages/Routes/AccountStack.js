@@ -1,11 +1,13 @@
 import Header from './Header';
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Login, Signup } from '../Login';
+import { Text } from 'react-native';
+import { Account, Settings } from '../Account';
 
 const Stack = createStackNavigator();
 
-export default function LoginStack() {
+export default function AccountStack() {
+  //screenOptions={Header(navigation)}
   return (
     <Stack.Navigator
       headerMode="screen"
@@ -14,9 +16,10 @@ export default function LoginStack() {
           <Header scene={scene} navigation={navigation} previous={previous} />
         ),
       }}
+      initialRouteName="Account"
     >
-      <Stack.Screen name="Login" component={Login} headerShown={true} />
-      <Stack.Screen name="Signup" component={Signup} headerShown={true} />
+      <Stack.Screen name="Account" component={Account} />
+      <Stack.Screen name="Settings" component={Settings} />
     </Stack.Navigator>
   );
 }

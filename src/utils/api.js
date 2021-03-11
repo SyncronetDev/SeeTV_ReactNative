@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import config from '~/config';
+import config from 'app/config';
 
 export const login = async ({ username, password }) => {
   const loginResponse = await fetch(`${config.API_SERVER}/api/Login`, {
@@ -17,7 +17,7 @@ export const login = async ({ username, password }) => {
       password,
     }),
   });
-  //console.log(loginResponse);
+  // console.log(loginResponse);
   if (loginResponse.status === 422) {
     Alert.alert('', `Forkert kodeord eller email`, [{ text: 'ok' }]);
     return null;
@@ -29,7 +29,7 @@ export const login = async ({ username, password }) => {
   if (loginResponse.ok) {
     return json.token;
   }
-
+  console.log(loginResponse);
   Alert.alert('', `Fejl: ${loginResponse.Error}`, [{ text: 'ok' }]);
   //console.log('ggwsaeg');
   //throw new Error(json);
@@ -74,11 +74,9 @@ export const fetchUser = async (token) => {
     },
   });
 
-  const json = await userResponse.json();
-
-  if (userResponse.ok) {
-    return json;
+  if (userResponse.status === 500) {
+    throw new Error(userResponse.statText);
   }
 
-  throw new Error(json);
+  return userResponse.ok ? await userResponse.json() : null;
 };

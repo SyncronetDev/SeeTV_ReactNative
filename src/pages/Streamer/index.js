@@ -14,12 +14,12 @@ import {
 import { NodeCameraView } from 'react-native-nodemediaclient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
-import ChatInputGroup from '../../components/ChatInputGroup';
-import MessagesList from '../../components/MessagesList/MessagesList';
-import { RTMP_SERVER } from '../../config';
+import ChatInputGroup from 'components/ChatInputGroup';
+import MessagesList from 'components/MessagesList/MessagesList';
+import { RTMP_SERVER } from 'src/app/config';
 import SocketManager from '../../socketManager';
-import { audioConfig, LIVE_STATUS, videoConfig } from '../../utils/constants';
-import Logger from '../../utils/logger';
+import { audioConfig, LIVE_STATUS, videoConfig } from 'utils/constants';
+import Logger from 'utils/logger';
 import styles from './styles';
 
 class Streamer extends React.Component {

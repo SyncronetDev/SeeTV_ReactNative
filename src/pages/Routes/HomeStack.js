@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from './../Home/index';
 import Streamer from './../Streamer/index';
 import Viewer from './../Viewer/index';
+import { Text } from 'react-native';
 
 const Stack = createStackNavigator();
 

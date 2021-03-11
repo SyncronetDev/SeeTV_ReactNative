@@ -1,11 +1,13 @@
 import Header from './Header';
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Login, Signup } from '../Login';
+import { Text } from 'react-native';
+import { Streams, Create } from '../Streams';
 
 const Stack = createStackNavigator();
 
-export default function LoginStack() {
+export default function StreamsStack() {
+  //screenOptions={Header(navigation)}
   return (
     <Stack.Navigator
       headerMode="screen"
@@ -14,9 +16,10 @@ export default function LoginStack() {
           <Header scene={scene} navigation={navigation} previous={previous} />
         ),
       }}
+      initialRouteName="Streams"
     >
-      <Stack.Screen name="Login" component={Login} headerShown={true} />
-      <Stack.Screen name="Signup" component={Signup} headerShown={true} />
+      <Stack.Screen name="Streams" component={Streams} />
+      <Stack.Screen name="Create" component={Create} />
     </Stack.Navigator>
   );
 }

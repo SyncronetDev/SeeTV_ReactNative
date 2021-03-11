@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import theme from '../../theme';
+import theme from '../../app/theme';
 import { useTheme } from 'react-native-paper';
 
 const styles = StyleSheet.create({
@@ -31,6 +31,9 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     textTransform: 'none',
     color: '#fff',
+  },
+  checkBox: {
+    marginVertical: 4,
   },
 });
 

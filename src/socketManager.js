@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 import Logger from './utils/logger';
-import { SOCKET_IO_SERVER } from './config';
+import { SOCKET_IO_SERVER } from 'app/config';
 
 const EVENT_JOIN_ROOM = 'join-room';
 const EVENT_LEAVE_ROOM = 'leave-room';
