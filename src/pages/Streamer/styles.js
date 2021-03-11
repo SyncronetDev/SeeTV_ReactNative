@@ -1,5 +1,5 @@
 import { LayoutAnimation, StyleSheet } from 'react-native';
-import * as Utility from '../../utils/utility';
+import * as Utility from 'utils';
 
 const styles = StyleSheet.create({
   container: {
@@ -20,6 +20,9 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  actionIcon: {
+    marginVertical: 12,
   },
   footer: { flex: 0.1 },
   center: { flex: 0.8 },
@@ -42,9 +45,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'flex-end',
     alignSelf: 'center',
-    width: 250,
-    height: 250,
-    bottom: -20,
+    width: 92,
+    height: 92,
+    bottom: 16,
     padding: 0,
   },
   btnClose: {

@@ -1,14 +1,12 @@
 import Header from './Header';
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from './../Home/index';
-import Streamer from './../Streamer/index';
-import Viewer from './../Viewer/index';
 import { Text } from 'react-native';
+import { Account, Settings } from '../Account';
 
 const Stack = createStackNavigator();
 
-export default function HomeStack() {
+export default function AccountStack() {
   //screenOptions={Header(navigation)}
   return (
     <Stack.Navigator
@@ -18,10 +16,10 @@ export default function HomeStack() {
           <Header scene={scene} navigation={navigation} previous={previous} />
         ),
       }}
+      initialRouteName="Account"
     >
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Streamer" component={Streamer} options={{ headerShown: false }} />
-      <Stack.Screen name="Viewer" component={Viewer} />
+      <Stack.Screen name="Account" component={Account} />
+      <Stack.Screen name="Settings" component={Settings} />
     </Stack.Navigator>
   );
 }

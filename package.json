@@ -1,23 +1,26 @@
 {
-  "name": "LiveStreamExample",
-  "version": "0.0.1",
+  "name": "Zome",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint .",
-    "postinstall": "sed -i '' '/s.resources/d' ./node_modules/react-native-vector-icons/RNVectorIcons.podspec"
+    "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.14.1",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/drawer": "^5.12.4",
+    "@react-navigation/elements": "^1.0.0-next.0",
     "@react-navigation/material-bottom-tabs": "^5.3.14",
     "@react-navigation/native": "^5.9.3",
     "@react-navigation/stack": "^5.14.3",
+    "@reduxjs/toolkit": "^1.5.0",
     "babel-eslint": "^10.1.0",
     "date-fns": "^2.19.0",
+    "babel-plugin-module-resolver": "^4.1.0",
     "install": "^0.13.0",
     "lodash": "^4.17.15",
     "lottie-react-native": "^3.5.0",
@@ -28,6 +31,7 @@
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-action-button": "^2.8.5",
+    "react-native-dotenv": "^2.5.3",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-nodemediaclient": "^0.1.13",
     "react-native-paper": "^4.7.2",
@@ -36,8 +40,9 @@
     "react-native-screens": "^2.18.0",
     "react-native-sticky-keyboard-accessory": "^0.1.3",
     "react-native-vector-icons": "^8.1.0",
-    "react-navigation": "^4.4.4",
-    "react-navigation-stack": "^2.10.3",
+    "react-redux": "^7.2.2",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "socket.io-client": "^2.4.0"
   },
   "devDependencies": {

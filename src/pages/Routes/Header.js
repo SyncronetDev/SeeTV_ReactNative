@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Appbar } from 'react-native-paper';
-import { MaterialIcons } from 'react-native-vector-icons';
+import { Appbar, Button, IconButton } from 'react-native-paper';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { openDrawer } from '@react-navigation/drawer';
 
 // export default class Header extends React.Component {
 //   constructor(props) {
@@ -71,4 +72,52 @@ import { MaterialIcons } from 'react-native-vector-icons';
 //   );
 // }
 
+export default Header = ({ scene, navigation, previous }) => {
+  const { options } = scene.descriptor;
+  const title =
+    options.headerTitle !== undefined
+      ? options.headerTitle
+      : options.title !== undefined
+      ? options.title
+      : scene.route.name;
+
+  // const { colors } = useTheme();
+  // console.log(this.props.theme);
+
+  return (
+    <Appbar.Header style={{ height: 56 }}>
+      {previous ? (
+        <Appbar.BackAction onPress={navigation.goBack} color="white" />
+      ) : (
+        <Appbar.Action
+          icon="menu"
+          onPress={() => {
+            navigation.openDrawer();
+          }}
+        ></Appbar.Action>
+      )}
+      <Appbar.Content
+        title={title}
+        size={16}
+        style={{ paddingLeft: 0, marginLeft: 0 }}
+      ></Appbar.Content>
+    </Appbar.Header>
+  );
+};
+
 // export { Header };
+
+/*
+<TouchableRipple
+          onPress={() => {
+            navigation.openDrawer();
+          }}
+        >
+          <MaterialIcons
+            name="menu"
+            size={24}
+            style={{ paddingLeft: 8, paddingRight: 16 }}
+            color="white"
+          />
+        </TouchableRipple>
+        */

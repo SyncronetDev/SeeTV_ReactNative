@@ -1,32 +1,39 @@
 import { StyleSheet } from 'react-native';
+import theme from '../../app/theme';
+import { useTheme } from 'react-native-paper';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    padding: 24,
   },
-  loginBtn: {
+  logoImage: {
+    width: '80%',
+    resizeMode: 'contain',
+    alignSelf: 'center',
+    marginBottom: 32,
+    marginTop: 48,
+  },
+  bottomRedContainer: {
+    width: '100%',
+    height: 56,
     backgroundColor: '#A60402',
+    justifyContent: 'center',
+  },
+  bottomContainer2Texts: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 15,
-    borderRadius: 10,
-    marginHorizontal: 25,
+    alignContent: 'center',
   },
-  textButton: {
-    color: 'white',
-    fontSize: 25,
+  subtextOnPrimary: {
+    fontSize: 12,
+    fontWeight: '400',
+    textTransform: 'none',
+    color: '#fff',
   },
-  input: {
-    color: 'black',
-    backgroundColor: '#EEEEEE',
-    borderRadius: 10,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    marginVertical: 20,
-    marginHorizontal: 25,
-    fontSize: 23,
-    fontWeight: '600',
+  checkBox: {
+    marginVertical: 4,
   },
 });
 

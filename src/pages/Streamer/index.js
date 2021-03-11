@@ -1,38 +1,28 @@
-import React from 'react';
+import get from 'lodash/get';
+import LottieView from 'lottie-react-native';
 import PropTypes from 'prop-types';
+import React from 'react';
 import {
-  View,
-  Image,
-  Text,
-  Animated,
-  Easing,
-  TouchableOpacity,
-  SafeAreaView,
   Alert,
   PermissionsAndroid,
+  SafeAreaView,
   StatusBar,
-  TouchableNativeFeedback,
-  Touchable,
+  TouchableOpacity,
   TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import { NodeCameraView } from 'react-native-nodemediaclient';
-import get from 'lodash/get';
-import { LIVE_STATUS, videoConfig, audioConfig } from '../../utils/constants';
-import SocketManager from '../../socketManager';
-import styles from './styles';
-import LiveStreamActionButton from './LiveStreamActionButton';
-import ChatInputGroup from '../../components/ChatInputGroup';
-import MessagesList from '../../components/MessagesList/MessagesList';
-import FloatingHearts from '../../components/FloatingHearts';
-import { RTMP_SERVER } from '../../config';
-import Logger from '../../utils/logger';
-import ActionButton from 'react-native-action-button';
-import { Header } from 'react-native/Libraries/NewAppScreen';
-import { Appbar, TouchableRipple } from 'react-native-paper';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import LottieView from 'lottie-react-native';
+import { connect } from 'react-redux';
+import ChatInputGroup from 'components/ChatInputGroup';
+import MessagesList from 'components/MessagesList/MessagesList';
+import { RTMP_SERVER } from 'src/app/config';
+import SocketManager from '../../socketManager';
+import { audioConfig, LIVE_STATUS, videoConfig } from 'utils/constants';
+import Logger from 'utils/logger';
+import styles from './styles';
 
-export default class Streamer extends React.Component {
+class Streamer extends React.Component {
   constructor(props) {
     super(props);
     const { route } = props;
@@ -46,7 +36,7 @@ export default class Streamer extends React.Component {
       countHeart: 0,
       isVisibleMessages: true,
       isLive: false,
-      btnStartStopProgress: new Animated.Value(0),
+      //btnStartStopProgress: new Animated.Value(0),
     };
     this.roomName = roomName;
     this.userName = userName;
@@ -78,11 +68,11 @@ export default class Streamer extends React.Component {
       this.setState({ messages });
     });
 
-    Animated.timing(this.state.btnStartStopProgress, {
+    /*Animated.timing(this.state.btnStartStopProgress, {
       toValue: 1,
       duration: 5000,
       easing: Easing.linear,
-    }).start();
+    }).start();*/
   }
 
   componentWillUnmount() {
@@ -203,7 +193,8 @@ export default class Streamer extends React.Component {
   render() {
     const { route } = this.props;
     const { currentLiveStatus, countHeart } = this.state;
-    const userName = get(route, 'params.userName', '');
+
+    const userName = this.props.user.username; //get(route, 'params.userName', '');
     const outputUrl = `rtmp://${RTMP_SERVER}/show/${userName}`;
 
     // console.log({ outputUrl });
@@ -240,13 +231,10 @@ export default class Streamer extends React.Component {
               <TouchableOpacity style={styles.btnClose} onPress={this.onPressClose}>
                 <MaterialIcons name="close" size={24} color="white" />
               </TouchableOpacity>
-              <LiveStreamActionButton
-                currentLiveStatus={currentLiveStatus}
-                onPress={this.onPressLiveStreamButton}
-              />
             </View>
             <View style={styles.sideBarRight}>
               <TouchableOpacity
+                style={styles.actionIcon}
                 onPress={() => {
                   this.nodeCameraViewRef.switchCamera();
                 }}
@@ -256,12 +244,11 @@ export default class Streamer extends React.Component {
             </View>
           </View>
           <TouchableWithoutFeedback
-            style={styles.btnStartStop}
-            progress={this.state.btnStartStopProgress}
             onPress={() => {
               const { isLive } = this.state;
               if (!this.state.isLive) {
                 this.setState({ btnStartStopProgress: 150 });
+                this.btn_record.play(51, 150);
                 this.onPressLiveStreamButton();
                 this.setState({ isLive: !isLive });
               } else {
@@ -270,18 +257,26 @@ export default class Streamer extends React.Component {
             }}
           >
             <LottieView
+              //progress={this.state.btnStartStopProgress}
               style={styles.btnStartStop}
               ref={(animation) => {
                 this.btn_record = animation;
               }}
               source={require('../../assets/Streaming/recordstop-button.json')}
               loop={false}
-              progress={1}
+              progress={50}
             ></LottieView>
           </TouchableWithoutFeedback>
         </SafeAreaView>
       </SafeAreaView>
     );
+
+    /*
+<LiveStreamActionButton
+                currentLiveStatus={currentLiveStatus}
+                onPress={this.onPressLiveStreamButton}
+              />
+    */
     /*
 <View style={styles.btnStartStop}>
             <TouchableWithoutFeedback
@@ -345,3 +340,9 @@ Streamer.defaultProps = {
   },
   route: null,
 };
+const mapStateToProps = (state) => {
+  const { user } = state;
+  return { user };
+};
+
+export default connect(mapStateToProps)(Streamer);
