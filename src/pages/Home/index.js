@@ -72,8 +72,8 @@ class Home extends React.Component {
     const { listLiveStream } = this.state;
     const refreshing = this.state;
 
-    console.dir(listLiveStream);
-    console.log(userName);
+    // console.dir(listLiveStream);
+    // console.log(userName);
     return (
       <SafeAreaView style={styles.container}>
         <Text style={styles.welcomeText}>Welcome : {userName}</Text>

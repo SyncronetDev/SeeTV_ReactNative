@@ -16,6 +16,9 @@ import Home from './pages/Home';
 import Streamer from './pages/Streamer';
 import Viewer from './pages/Viewer';
 import theme from './theme';
+import LoginPage from './pages/LoginPage';
+import TVGuide from './pages/TVGuide/TVGuide';
+
 import { Appbar } from 'react-native-paper';
 
 const Drawer = createDrawerNavigator();
@@ -28,9 +31,11 @@ class App extends Component {
     return (
       <PaperProvider theme={theme}>
         <NavigationContainer>
-          <Drawer.Navigator drawerContent={(props) => <CloseDrawerElement {...props} />}>
+          <Drawer.Navigator>
             <Drawer.Screen name="Login" component={LoginStack} />
             <Drawer.Screen name="HomeStack" component={HomeStack} />
+            <Drawer.Screen name="Loginpage" component={LoginPage} />
+            <Drawer.Screen name="TVGuide" component={TVGuide} />
           </Drawer.Navigator>
         </NavigationContainer>
       </PaperProvider>

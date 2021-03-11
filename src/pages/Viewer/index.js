@@ -162,7 +162,7 @@ export default class Viewer extends Component {
 
   renderNodePlayerView = () => {
     const { inputUrl } = this.state;
-    console.log(inputUrl);
+    // console.log(inputUrl);
     if (!inputUrl) return null;
     return (
       <NodePlayerView

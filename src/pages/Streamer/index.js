@@ -38,7 +38,7 @@ export default class Streamer extends React.Component {
     const { route } = props;
     const roomName = get(route, 'params.roomName');
     const userName = get(route, 'params.userName', '');
-    console.log(userName);
+    // console.log(userName);
     this.state = {
       currentLiveStatus: LIVE_STATUS.PREPARE,
       enabledFlash: false,
@@ -206,7 +206,7 @@ export default class Streamer extends React.Component {
     const userName = get(route, 'params.userName', '');
     const outputUrl = `rtmp://${RTMP_SERVER}/show/${userName}`;
 
-    console.log({ outputUrl });
+    // console.log({ outputUrl });
 
     /*
     <TouchableOpacity
