@@ -21,3 +21,9 @@ export const hexToRgb = (hex) => {
       }
     : null;
 };
+
+import moment from 'moment/min/moment-with-locales.js';
+
+export const getFormattedDate = (date, format) => {
+  return moment(date).format(format);
+};

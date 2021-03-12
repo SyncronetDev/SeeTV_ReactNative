@@ -6,11 +6,11 @@ import { NodePlayerView } from 'react-native-nodemediaclient';
 import moment from 'moment';
 import SocketManager from '../../socketManager';
 import styles from './styles';
-import FloatingHearts from '../../components/FloatingHearts';
-import ChatInputGroup from '../../components/ChatInputGroup';
-import MessagesList from '../../components/MessagesList/MessagesList';
-import { LIVE_STATUS } from '../../utils/constants';
-import { RTMP_SERVER } from '../../config';
+import FloatingHearts from 'components/FloatingHearts';
+import ChatInputGroup from 'components/ChatInputGroup';
+import MessagesList from 'components/MessagesList/MessagesList';
+import { LIVE_STATUS } from 'utils/constants';
+import { RTMP_SERVER } from 'app/config';
 
 export default class Viewer extends Component {
   constructor(props) {

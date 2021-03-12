@@ -3,13 +3,13 @@ import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
 } from '@react-navigation/native';
-import { colors, configureFonts } from 'react-native-paper';
-// import color from 'color';
+import { Colors, configureFonts } from 'react-native-paper';
+import color from 'color';
 
 const Primary = '#A60402';
 const Accent = '#03dac4';
 
-export default {
+export default theme = {
   default: {
     ...NavigationDefaultTheme,
     ...PaperDefaultTheme,
@@ -23,6 +23,10 @@ export default {
       surface: '#f9f9f9',
       card: '#f9f9f9',
       drawer: '#fff',
+      drawerIcon: Primary,
+      drawerHighlight: color(Primary).alpha(0.14).rgb().string(),
+      drawerText: '#000000',
+      drawerTextSelected: Primary,
       border: '#00ff00',
       error: '#B00020',
       text: '#000000',
@@ -37,7 +41,7 @@ export default {
       scale: 1.0,
     },
     asset: {
-      logobig: require('./assets/theme/default/logo-big.png'),
+      logobig: require('assets/theme/default/logo-big.png'),
     },
   },
   dark: {
@@ -50,9 +54,13 @@ export default {
       primary: Primary,
       accent: Accent,
       drawer: '#323232',
+      drawerIcon: color(Primary).whiten(35).rgb().string(),
+      drawerHighlight: color(Primary).whiten(40).alpha(0.14).rgb().string(),
+      drawerText: '#D0D0D0',
+      drawerTextSelected: '#D0D0D0',
     },
     asset: {
-      logobig: require('./assets/theme/dark/logo-big.png'),
+      logobig: require('assets/theme/dark/logo-big.png'),
     },
   },
 };

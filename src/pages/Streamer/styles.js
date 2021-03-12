@@ -1,5 +1,5 @@
 import { LayoutAnimation, StyleSheet } from 'react-native';
-import * as Utility from '../../utils/utility';
+import * as Utility from 'utils';
 
 const styles = StyleSheet.create({
   container: {
