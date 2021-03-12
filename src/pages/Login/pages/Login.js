@@ -1,21 +1,20 @@
+import apptheme from 'app/theme';
+import Triangle from 'components/Shapes/Triangle';
 import React from 'react';
 import {
   Alert,
+  Appearance,
   Image,
   Keyboard,
   KeyboardAvoidingView,
   SafeAreaView,
   Text,
   View,
-  Appearance,
 } from 'react-native';
-import { Button, TextInput, withTheme } from 'react-native-paper';
-import config from 'app/config';
-import { fetchUser, login as apiLogin } from 'utils/api';
-import Triangle from 'components/Shapes/Triangle';
+import { Button, TextInput } from 'react-native-paper';
+import { user as apiUser, login as apiLogin } from 'utils/api';
+import AuthContext from 'src/store/AuthContext';
 import styles from '../styles';
-import AuthContext from '../../../store/AuthContext';
-import apptheme from 'app/theme';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -38,14 +37,14 @@ export default class Login extends React.Component {
     } = this.props;
 
     const token = await apiLogin({ username, password });
-    const user = await fetchUser(token);
+    const user = await apiUser(token);
 
     await this.props.signIn({ token, user });
 
     return navigate('HomeStack', {
       screen: 'Home',
       params: { username },
-    }); //.navigate('Home', { username });
+    }); // .navigate('Home', { username });
   };
 
   onChangeUserName = (username) => this.setState({ username });
@@ -56,6 +55,7 @@ export default class Login extends React.Component {
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidShow);
   }
+
   componentWillUnmount() {
     this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener.remove();
@@ -64,6 +64,7 @@ export default class Login extends React.Component {
   keyboardDidShow(e) {
     console.log(e);
   }
+
   keyboardDidHide(e) {
     console.log(e);
   }
@@ -82,7 +83,7 @@ export default class Login extends React.Component {
               <Image source={theme.asset.logobig} style={styles.logoImage} />
               <TextInput
                 autoCompleteType="email"
-                dense={true}
+                dense
                 style={styles.input}
                 placeholderTextColor="gray"
                 value={username}
@@ -93,7 +94,7 @@ export default class Login extends React.Component {
               />
               <TextInput
                 style={styles.input}
-                dense={true}
+                dense
                 autoCompleteType="password"
                 label="Password"
                 value={password}
