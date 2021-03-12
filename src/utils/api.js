@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { Alert } from 'react-native';
 import ApiClient from './ApiClient';
+import ApiClientError from './ApiClientError';
 
 const client = new ApiClient();
 export default client;
@@ -52,9 +53,9 @@ export const authenticate = async (token) => {
 };
 
 export const getBroadcasts = async ({ id, date }) => {
-  const formattedDate = format(date, 'MM/dd/yyyy');
+  const formattedDate = format(date instanceof Date ? date : new Date(date), 'MM/dd/yyyy');
 
-  const broadcasts = await this.$api.$get(`/Municipalities/${id}/Channels?date=${formattedDate}`);
+  const broadcasts = await client.get(`/api/Municipalities/${id}/Channels?date=${formattedDate}`);
 
   return broadcasts;
 };

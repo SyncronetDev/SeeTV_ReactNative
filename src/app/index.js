@@ -55,11 +55,22 @@ export default function App() {
 
   React.useEffect(() => {
     const bootstrapAsync = async () => {
-      const userToken = await AsyncStorage.getItem('userToken');
+      try {
+        const userToken = await AsyncStorage.getItem('userToken');
 
-      const _user = await authenticate(userToken);
-
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken, user: _user });
+        if (userToken) {
+          try {
+            const _user = await authenticate(userToken);
+            dispatch({ type: 'RESTORE_TOKEN', token: userToken, user: _user });
+          } catch (err) {
+            console.log('Invalid user token; signing out.');
+            authContext.signOut();
+          }
+        }
+      } catch (err) {
+        console.log('restore token failed');
+        console.log(err);
+      }
     };
 
     bootstrapAsync();
@@ -119,9 +130,10 @@ export default function App() {
               </>
             ) : (
               //TV GUIDE
+              // <Drawer.Screen name="Guide" component={HomeStack} />
+
               <>
                 <Drawer.Screen name="TVGuide" component={TVGuide} />
-                <Drawer.Screen name="Guide" component={HomeStack} />
                 <Drawer.Screen name="Login" component={LoginStack} />
               </>
             )}

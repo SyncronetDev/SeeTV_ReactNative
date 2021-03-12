@@ -7,7 +7,7 @@ import { SafeAreaView, View, StyleSheet, FlatList, Text, ScrollView } from 'reac
 import { Searchbar } from 'react-native-paper';
 import FlatListDropDown from '../components/DropdownList';
 
-import { fetchGuideBroadcasts } from 'utils/api';
+import { getBroadcasts } from 'utils/api';
 
 // async function FetchGuideData(Munic) {
 //   return await fetchGuideBroadcasts(Munic);
@@ -21,7 +21,8 @@ export default function TVGuide({ municipalityId = 1 }) {
 
   React.useEffect(() => {
     const bootstrap = async () => {
-      const data = await fetchGuideBroadcasts(municipalityId);
+      const data = await getBroadcasts({ id: municipalityId, date: '03/12/2021' });
+
       setGuideData(data);
     };
 
@@ -166,6 +167,7 @@ export default function TVGuide({ municipalityId = 1 }) {
                       </View>
                     );
                   })}
+                  <View></View>
                 </View>
               </View>
             </ScrollView>

@@ -74,63 +74,63 @@ export default class ApiClient {
 
   handleApiResponse(response): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      return response
-        .then((res) => res.json())
-        .then((data) => resolve(data))
-        .catch(async (err) => {
-          console.log({ err });
+      return response.then((res) => {
+        if (res.ok) {
+          const data = res.json();
 
-          const data = await response.json();
+          return resolve(data);
+        }
 
-          console.log({ data });
+        if (res.status === 422) {
+          const data = res.json();
 
-          switch (response.status) {
-            case 422: // Laravel validation failed
-              return reject(
-                new ApiClientError({
-                  status: response.status,
-                  message: 'Laravel validation failed',
-                  content: this.extractErrorsFromLaravelResponse(data),
-                })
-              );
+          return reject(
+            new ApiClientError({
+              status: res.status,
+              message: 'Laravel validation failed',
+              content: this.extractErrorsFromLaravelResponse(data),
+            })
+          );
+        }
 
-            case 419:
-              return reject(
-                new ApiClientError({
-                  status: response.status,
-                  message: 'CSRF token is invalid',
-                  content: '',
-                })
-              );
+        switch (res.status) {
+          case 419:
+            return reject(
+              new ApiClientError({
+                status: res.status,
+                message: 'CSRF token is invalid',
+                content: '',
+              })
+            );
 
-            case 401: // Unauthenticated
-              return reject(
-                new ApiClientError({
-                  status: response.status,
-                  message: 'Unauthenticated',
-                  content: 'You are not logged in.',
-                })
-              );
+          case 401: // Unauthenticated
+            return reject(
+              new ApiClientError({
+                status: res.status,
+                message: 'Unauthenticated',
+                content: 'You are not logged in.',
+              })
+            );
 
-            case 403: // Forbidden aka. Unauthorized
-              return reject(
-                new ApiClientError({
-                  status: response.status,
-                  message: 'Unauthorized',
-                  content: 'Access denied.',
-                })
-              );
+          case 403: // Forbidden aka. Unauthorized
+            return reject(
+              new ApiClientError({
+                status: res.status,
+                message: 'Unauthorized',
+                content: 'Access denied.',
+              })
+            );
 
-            default:
-              return reject(
-                new ApiClientError({
-                  status: response.status,
-                  message: 'Server error',
-                  content: response.statusText,
-                })
-              );
-          }
-        });
+          default:
+            return reject(
+              new ApiClientError({
+                status: res.status,
+                message: 'Server error',
+                content: res.statusText,
+              })
+            );
+        }
+      });
     });
   }
 
