@@ -4,7 +4,6 @@ import { View, Image, TouchableOpacity, Text, SafeAreaView, Animated, Alert } fr
 import get from 'lodash/get';
 import { NodePlayerView } from 'react-native-nodemediaclient';
 import moment from 'moment';
-import SocketManager from '../../socketManager';
 import styles from './styles';
 import FloatingHearts from 'components/FloatingHearts';
 import ChatInputGroup from 'components/ChatInputGroup';
@@ -39,23 +38,23 @@ export default class Viewer extends Component {
      * Just for replay
      */
     if (this.liveStatus === LIVE_STATUS.FINISH) {
-      SocketManager.instance.emitReplay({
-        userName: this.userName,
-        roomName: this.roomName,
-      });
-      SocketManager.instance.listenReplay((data) => {
-        const { beginAt, messages } = data;
-        const start = moment(beginAt);
-        for (let i = 0; i < messages.length; i += 1) {
-          ((j, that) => {
-            const end = moment(messages[j].createdAt);
-            const duration = end.diff(start);
-            setTimeout(() => {
-              that.setState((prevState) => ({ messages: [...prevState.messages, messages[j]] }));
-            }, duration);
-          })(i, this);
-        }
-      });
+      // SocketManager.instance.emitReplay({
+      //   userName: this.userName,
+      //   roomName: this.roomName,
+      // });
+      // SocketManager.instance.listenReplay((data) => {
+      //   const { beginAt, messages } = data;
+      //   const start = moment(beginAt);
+      //   for (let i = 0; i < messages.length; i += 1) {
+      //     ((j, that) => {
+      //       const end = moment(messages[j].createdAt);
+      //       const duration = end.diff(start);
+      //       setTimeout(() => {
+      //         that.setState((prevState) => ({ messages: [...prevState.messages, messages[j]] }));
+      //       }, duration);
+      //     })(i, this);
+      //   }
+      // });
       const inputUrl = `https://${RTMP_SERVER}/hls/${this.roomName}`;
       this.setState({ inputUrl });
     } else {
@@ -63,30 +62,30 @@ export default class Viewer extends Component {
         inputUrl: `https://${RTMP_SERVER}/hls/${this.roomName}`,
         messages: this.messages,
       });
-      SocketManager.instance.emitJoinRoom({
-        userName: this.userName,
-        roomName: this.roomName,
-      });
-      SocketManager.instance.listenSendHeart(() => {
-        this.setState((prevState) => ({ countHeart: prevState.countHeart + 1 }));
-      });
-      SocketManager.instance.listenSendMessage((data) => {
-        const messages = get(data, 'messages', []);
-        this.setState({ messages });
-      });
-      SocketManager.instance.listenFinishLiveStream(() => {
-        Alert.alert(
-          'Alert ',
-          'Thanks for watching this live stream',
-          [
-            {
-              text: 'Okay',
-              onPress: () => navigation.goBack(),
-            },
-          ],
-          { cancelable: false }
-        );
-      });
+      // SocketManager.instance.emitJoinRoom({
+      //   userName: this.userName,
+      //   roomName: this.roomName,
+      // });
+      // SocketManager.instance.listenSendHeart(() => {
+      //   this.setState((prevState) => ({ countHeart: prevState.countHeart + 1 }));
+      // });
+      // SocketManager.instance.listenSendMessage((data) => {
+      //   const messages = get(data, 'messages', []);
+      //   this.setState({ messages });
+      // });
+      // SocketManager.instance.listenFinishLiveStream(() => {
+      //   Alert.alert(
+      //     'Alert ',
+      //     'Thanks for watching this live stream',
+      //     [
+      //       {
+      //         text: 'Okay',
+      //         onPress: () => navigation.goBack(),
+      //       },
+      //     ],
+      //     { cancelable: false }
+      //   );
+      // });
       this.startBackgroundAnimation();
     }
   }
@@ -118,17 +117,17 @@ export default class Viewer extends Component {
   };
 
   onPressHeart = () => {
-    SocketManager.instance.emitSendHeart({
-      roomName: this.roomName,
-    });
+    // SocketManager.instance.emitSendHeart({
+    //   roomName: this.roomName,
+    // });
   };
 
   onPressSend = (message) => {
-    SocketManager.instance.emitSendMessage({
-      roomName: this.roomName,
-      userName: this.userName,
-      message,
-    });
+    // SocketManager.instance.emitSendMessage({
+    //   roomName: this.roomName,
+    //   userName: this.userName,
+    //   message,
+    // });
     this.setState({ isVisibleMessages: true });
   };
 
