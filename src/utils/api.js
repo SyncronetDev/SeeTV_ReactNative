@@ -1,82 +1,81 @@
+import { format } from 'date-fns';
 import { Alert } from 'react-native';
-import config from 'app/config';
+import ApiClient from './ApiClient';
+
+const client = new ApiClient();
+export default client;
+
+export const csrf = async () => {
+  const token = await client.get('csrf-token');
+
+  ApiClient.csrfToken = token;
+
+  return token;
+};
 
 export const login = async ({ username, password }) => {
-  const loginResponse = await fetch(`${config.API_SERVER}/api/Login`, {
-    method: 'POST',
-    mode: 'cors',
-    cache: 'no-cache',
-    credentials: 'include', // include, *same-origin, omit
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      // email: email,
-      username,
-      password,
-    }),
-  });
-  // console.log(loginResponse);
-  if (loginResponse.status === 422) {
-    Alert.alert('', `Forkert kodeord eller email`, [{ text: 'ok' }]);
-    return null;
-  }
+  try {
+    const { token } = await client.post('/api/Login', { username, password });
 
-  const json = await loginResponse.json();
+    ApiClient.authToken = token;
 
-  //console.log(loginResponse);
-  if (loginResponse.ok) {
-    return json.token;
+    return token;
+  } catch (err) {
+    if (err.status === 422) {
+      Alert.alert('', `Forkert kodeord eller email`, [{ text: 'ok' }]);
+    } else {
+      throw err;
+    }
   }
-  console.log(loginResponse);
-  Alert.alert('', `Fejl: ${loginResponse.Error}`, [{ text: 'ok' }]);
-  //console.log('ggwsaeg');
-  //throw new Error(json);
 };
 
 export const register = async ({ email, username, password }) => {
-  const registerResponse = await fetch(`${config.API_SERVER}/api/Register`, {
-    method: 'POST',
-    mode: 'cors',
-    cache: 'no-cache',
-    credentials: 'include', // include, *same-origin, omit
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      email,
-      username,
-      password,
-    }),
-  });
+  const { token } = await client.post('/api/Register', { email, username, password });
 
-  const json = await registerResponse.json();
+  ApiClient.authToken = token;
 
-  if (registerResponse.ok) {
-    return json.token;
-  }
-
-  throw new Error(json);
+  return token;
 };
 
-export const fetchUser = async (token) => {
-  const userResponse = await fetch(`${config.API_SERVER}/api/User`, {
-    method: 'GET',
-    mode: 'cors',
-    cache: 'no-cache',
-    credentials: 'include', // include, *same-origin, omit
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  });
+export const user = async () => {
+  const data = await client.get('/api/User');
 
-  if (userResponse.status === 500) {
-    throw new Error(userResponse.statText);
-  }
+  return data;
+};
 
-  return userResponse.ok ? await userResponse.json() : null;
+export const authenticate = async (token) => {
+  ApiClient.authToken = token;
+
+  const data = await user();
+
+  return data;
+};
+
+export const getBroadcasts = async ({ id, date }) => {
+  const formattedDate = format(date, 'MM/dd/yyyy');
+
+  const broadcasts = await this.$api.$get(`/Municipalities/${id}/Channels?date=${formattedDate}`);
+
+  return broadcasts;
+};
+
+export const getPlannedBroadcasts = async ({ id }) => {
+  const { dates, data } = await client.get(`/api/Channels/${id}/Broadcasts/Planned`);
+
+  return {
+    dates,
+    broadcasts: data,
+  };
+};
+
+export const getHistoricalBroadcasts = async ({ id, page, perPage }) => {
+  const { meta, data } = await client.get(
+    `/api/Channels/${id}/Broadcasts/History?page=${page || 1}&per_page=${perPage || 15}`
+  );
+
+  return {
+    page: meta.current_page,
+    total: meta.total,
+    broadcasts: data,
+  };
 };
