@@ -2,33 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
-//Params: icon, color, size, style, communityIcon
-// const MaterialIcon = ({ iconSize, style, communityIcon, icon, color }) => {
-//   //   console.log(props);
-//   //   if (communityIcon === false) {
-//   //     console.log('MaterialIcon denied');
-//   //     return;
-//   //   }
-//   //console.log(iconSize);
-//   return communityIcon ? (
-//     <MaterialCommunityIcons
-//       name={icon || 'menu'}
-//       color={color || 'black'}
-//       size={iconSize || 24}
-//       style={style || defaultStyle.icon}
-//     />
-//   ) : (
-//     <MaterialIcons
-//       name={icon || 'menu'}
-//       color={color || 'black'}
-//       size={iconSize || 24}
-//       style={style || defaultStyle.icon}
-//     />
-//   );
-// };
-//size={size !== null ? size : 24}
-//size={size !== null ? size : 24}
+import PropTypes from 'prop-types';
 
 const defaultStyle = StyleSheet.create({
   icon: {
@@ -39,26 +13,26 @@ const defaultStyle = StyleSheet.create({
   },
 });
 
-// export default MaterialIcon;
-
-export default class MaterialIcon extends React.Component {
-  render() {
-    const { iconSize, style, communityIcon, icon, color } = this.props;
-    console.log(communityIcon);
-    return !!communityIcon ? (
-      <MaterialCommunityIcons
-        name={icon || 'menu'}
-        color={color || 'black'}
-        size={iconSize || 24}
-        style={style || defaultStyle.icon}
-      />
-    ) : (
-      <MaterialIcons
-        name={icon || 'menu'}
-        color={color || 'black'}
-        size={iconSize || 24}
-        style={style || defaultStyle.icon}
-      />
-    );
-  }
+export default function MaterialIcon({ iconSize, style, communityIcon, icon, color }) {
+  return communityIcon ? (
+    <MaterialCommunityIcons name={icon} color={color} size={iconSize} style={style} />
+  ) : (
+    <MaterialIcons name={icon} color={color} size={iconSize} style={style} />
+  );
 }
+
+MaterialIcon.propTypes = {
+  iconSize: PropTypes.string,
+  style: Object,
+  communityIcon: PropTypes.bool,
+  icon: PropTypes.string,
+  color: PropTypes.string,
+};
+
+MaterialIcon.defaultProps = {
+  iconSize: 24,
+  style: defaultStyle.icon,
+  communityIcon: false,
+  icon: 'menu',
+  color: 'black',
+};
