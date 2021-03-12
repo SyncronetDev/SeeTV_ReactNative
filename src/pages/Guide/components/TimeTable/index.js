@@ -12,7 +12,63 @@ export default class TimeTableView extends Component {
     super(props);
     this.state = {
       currentMoment: props.pivotDate,
-      Channels: ['sm', 'sh', 'gua', 'agh'],
+      Channels: [
+        { name: 'sm', events: [moment().hour(15).minute(30)] },
+        'sh',
+        'gua',
+        'agh',
+        'sh',
+        'gua',
+        'agh',
+        'sh',
+        'gua',
+        'agh',
+        'sh',
+        'gua',
+        'agh',
+        'sh',
+        'gua',
+        'agh',
+        'sh',
+        'gua',
+        'agh',
+        'sh',
+        'gua',
+        'agh',
+        'sh',
+        'gua',
+        'agh',
+        'sh',
+        'gua',
+        'agh',
+        'sh',
+        'gua',
+        'agh',
+        'sh',
+        'gua',
+        'agh',
+        'sh',
+        'gua',
+        'agh',
+        'sh',
+        'gua',
+        'agh',
+        'sh',
+        'gua',
+        'agh',
+        'sh',
+        'gua',
+        'agh',
+        'sh',
+        'gua',
+        'agh',
+        'sh',
+        'gua',
+        'agh',
+        'sh',
+        'gua',
+        'agh',
+      ],
     };
     const { pivotTime, pivotEndTime } = this.props;
     this.calendar = null;
@@ -53,7 +109,7 @@ export default class TimeTableView extends Component {
     let flip = false;
     // style={styles.container}
     return (
-      <ScrollView>
+      <ScrollView nestedScrollEnabled={true}>
         <View style={styles.container}>
           <View style={styles.header}>
             {console.log(ChannelHeader({ numberOfDays: 5 }))}
@@ -69,7 +125,7 @@ export default class TimeTableView extends Component {
                       backgroundColor: flip ? 'green' : 'purple',
                     }}
                   >
-                    <Text style={{ alignSelf: 'center' }}>name</Text>
+                    <Text style={{ alignSelf: 'center' }}>{name.name}</Text>
                   </View>
                 )
               )
@@ -78,11 +134,11 @@ export default class TimeTableView extends Component {
               style={headerStyle}
               formatDate={formatDateHeader}
               selectedDate={currentMoment}
-              numberOfDays={numberOfDays}
+              numberOfDays={Channels}
             />
           </View>
           <ScrollView ref={this.props.scrollViewRef} horizontal={true}>
-            <View style={styles.scrollViewContent}>
+            <View>
               <View style={styles.timeColumn}>
                 {this.times.map((time) => (
                   <View key={time} style={styles.timeLabel}>
@@ -90,6 +146,7 @@ export default class TimeTableView extends Component {
                   </View>
                 ))}
               </View>
+
               <View key={date} style={styles.eventsContainer}>
                 <Broadcasts
                   pivotTime={pivotTime}
