@@ -1,25 +1,19 @@
 import { DrawerContentScrollView } from '@react-navigation/drawer';
-import apptheme from 'app/theme';
-import { default as React, useContext } from 'react';
-import { Appearance, Text, View } from 'react-native';
+import React from 'react';
+import { Text, View } from 'react-native';
 import { Avatar, Divider, List } from 'react-native-paper';
 import AuthContext from 'src/store/AuthContext';
 import MDDrawerListItem from './MDDrawerListItem';
 
 export default function DrawerContent(props) {
-  const { isLoggedIn, signOut, user } = useContext(AuthContext);
+  const { signOut, user } = React.useContext(AuthContext);
 
-  const theme = Appearance.getColorScheme() === 'dark' ? apptheme.dark : apptheme.default;
-
-  // console.log(user());
-  //user().username.toString()
-  // console.log(colors);
   return (
     <DrawerContentScrollView {...props}>
-      {user() ? (
+      {user ? (
         <View>
           <Avatar.Text
-            label={user().initials.toString().toUpperCase()}
+            label={user.initials.toString().toUpperCase()}
             size={64}
             style={{ marginHorizontal: 20, marginTop: 20 }}
           />
@@ -27,8 +21,8 @@ export default function DrawerContent(props) {
             style={{ marginHorizontal: 8, borderRadius: 4, overflow: 'hidden', marginBottom: 4 }}
           >
             <List.Accordion
-              title={user().username}
-              description={user().email}
+              title={user.username}
+              description={user.email}
               style={{ marginLeft: 0 }}
             >
               <Divider style={{ marginLeft: 16 }} />
@@ -38,8 +32,8 @@ export default function DrawerContent(props) {
                 route="Account"
                 parentRoute="Account"
                 icon="account-circle-outline"
-                communityIcon={true}
-                isNested={true}
+                communityIcon
+                isNested
               />
 
               <MDDrawerListItem
@@ -49,14 +43,14 @@ export default function DrawerContent(props) {
                 parentRoute="Account"
                 icon="menu"
                 communityIcon={false}
-                isNested={true}
+                isNested
               />
               <MDDrawerListItem
                 {...props}
                 title="Log ud"
                 icon="logout"
-                communityIcon={true}
-                isNested={true}
+                communityIcon
+                isNested
                 onPress={() => {
                   props.navigation.closeDrawer();
                   signOut();
@@ -70,7 +64,7 @@ export default function DrawerContent(props) {
             title="Guide"
             route="Guide"
             icon="television-guide"
-            communityIcon={true}
+            communityIcon
             style={{ marginTop: 0 }}
           />
           <Divider />
@@ -83,7 +77,7 @@ export default function DrawerContent(props) {
             icon="layers-search"
             communityIcon={false}
             style={{ marginTop: 0 }}
-            iconRight={true}
+            iconRight
             onPress={() => console.log('display channels')}
           />
           <Divider />
@@ -96,7 +90,7 @@ export default function DrawerContent(props) {
             route="Create"
             parentRoute="Streams"
             icon="plus"
-            communityIcon={true}
+            communityIcon
             style={{ marginTop: 0, alignItems: 'center', justifyContent: 'center' }}
           />
           <MDDrawerListItem
@@ -115,7 +109,7 @@ export default function DrawerContent(props) {
             title="Login"
             route="Login"
             icon="login"
-            communityIcon={true}
+            communityIcon
             style={{ marginTop: 0 }}
           />
           <MDDrawerListItem
@@ -123,7 +117,7 @@ export default function DrawerContent(props) {
             title="Guide"
             route="Guide"
             icon="television-guide"
-            communityIcon={true}
+            communityIcon
             style={{ marginTop: 0 }}
           />
           <MDDrawerListItem
@@ -131,7 +125,7 @@ export default function DrawerContent(props) {
             title="TVGuide"
             route="TVGuide"
             icon="television-guide"
-            communityIcon={true}
+            communityIcon
             style={{ marginTop: 0 }}
           />
         </View>

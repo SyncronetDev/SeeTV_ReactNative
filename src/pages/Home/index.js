@@ -77,7 +77,7 @@ class Home extends React.Component {
         {(authcontext) => {
           return (
             <SafeAreaView style={styles.container}>
-              <Text style={styles.welcomeText}>Welcome : {authcontext.user().username}</Text>
+              <Text style={styles.welcomeText}>Welcome : {authcontext.user.username}</Text>
               <Text style={styles.title}>List live stream video</Text>
               <FlatList
                 refreshControl={
