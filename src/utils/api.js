@@ -29,7 +29,7 @@ export const login = async ({ username, password }) => {
   if (loginResponse.ok) {
     return json.token;
   }
-  console.log(loginResponse);
+  // console.log(loginResponse);
   Alert.alert('', `Fejl: ${loginResponse.Error}`, [{ text: 'ok' }]);
   //console.log('ggwsaeg');
   //throw new Error(json);
@@ -75,8 +75,33 @@ export const fetchUser = async (token) => {
   });
 
   if (userResponse.status === 500) {
-    throw new Error(userResponse.statText);
+    throw new Error(userResponse.statusText);
   }
 
   return userResponse.ok ? await userResponse.json() : null;
+};
+
+export const fetchGuideBroadcasts = async (MunicipalityID) => {
+  const Response = await fetch(
+    `${config.API_SERVER}/api/Municipalities/${MunicipalityID}/Channels`,
+    {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'include', // include, *same-origin, omit
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  // console.log(`${config.API_SERVER}/api/Municipalities/${MunicipalityID}/Channels`);
+
+  if (Response.ok) {
+    const data = await Response.json();
+    return data;
+  }
+
+  throw new Error(Response.statusText);
 };

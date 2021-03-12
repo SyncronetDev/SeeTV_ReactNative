@@ -44,7 +44,6 @@ const defaultStyle = StyleSheet.create({
 export default class MaterialIcon extends React.Component {
   render() {
     const { iconSize, style, communityIcon, icon, color } = this.props;
-    console.log(communityIcon);
     return !!communityIcon ? (
       <MaterialCommunityIcons
         name={icon || 'menu'}

@@ -172,9 +172,9 @@ export default function App({ navigation }) {
             ) : (
               //TV GUIDE
               <>
+                <Drawer.Screen name="TVGuide" component={TVGuide} />
                 <Drawer.Screen name="Guide" component={HomeStack} />
                 <Drawer.Screen name="Login" component={LoginStack} />
-                <Drawer.Screen name="TVGuide" component={TVGuide} />
               </>
             )}
           </Drawer.Navigator>

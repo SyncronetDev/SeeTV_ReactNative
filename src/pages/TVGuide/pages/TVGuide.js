@@ -2,20 +2,47 @@ import { useIsFocused, useTheme } from '@react-navigation/native';
 import { addDays, eachDayOfInterval } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { map } from 'lodash';
-import React, { createRef, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import { SafeAreaView, View, StyleSheet, FlatList, Text, ScrollView } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import FlatListDropDown from '../components/DropdownList';
 
-export default function TVGuide() {
-  const dayList = React.useMemo(
-    () =>
-      eachDayOfInterval({
-        start: new Date(),
-        end: addDays(new Date(), 6),
-      }),
-    []
-  );
+import { fetchGuideBroadcasts } from 'utils/api';
+
+// async function FetchGuideData(Munic) {
+//   return await fetchGuideBroadcasts(Munic);
+// }
+
+export default function TVGuide({ municipalityId = 1 }) {
+  const [GuideData, setGuideData] = React.useState([]);
+  const [TimeHeaderWidth, setTimeHeaderWidth] = React.useState(0);
+
+  let refScrollView = React.createRef();
+
+  React.useEffect(() => {
+    const bootstrap = async () => {
+      const data = await fetchGuideBroadcasts(municipalityId);
+      setGuideData(data);
+    };
+
+    bootstrap();
+  }, [municipalityId]);
+
+  useEffect(() => {
+    function handleStatusChange(status) {
+      refScrollView.scrollTo((TimeHeaderWidth / parseInt(1440)) * (16 * 60));
+    }
+  });
+
+  // GuideData.map((item) => {
+  //   console.log(item.name);
+  // });
+  // console.log(GuideData); //.broadcasts[0].starts_at
+
+  const dayList = eachDayOfInterval({
+    start: new Date(),
+    end: addDays(new Date(), 6),
+  });
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -48,20 +75,97 @@ export default function TVGuide() {
             )}
           />
         </View>
-        <ScrollView>
+        <ScrollView nestedScrollEnabled={true}>
           <View style={{ flexDirection: 'row' }}>
             <View>
               <View style={{ height: 20, backgroundColor: '#f03060' }}></View>
-              <View style={{ backgroundColor: '#606060' }}>{DisplayPublishers()}</View>
+              <View style={{ backgroundColor: '#606060' }}>
+                {GuideData.map((item) => {
+                  return (
+                    <>
+                      <View style={styles.publisherContainer}>
+                        <View
+                          style={{
+                            ...styles.publisherContainer,
+                            backgroundColor: '#406080',
+                            flex: 1,
+                          }}
+                        >
+                          <Text>{item.name}</Text>
+                        </View>
+                      </View>
+                    </>
+                  );
+                })}
+              </View>
             </View>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-              <View style={styles.tvGuideItemHeight}>
+            <ScrollView
+              ref={(ref) => (refScrollView = ref)}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              onLayout={() => {
+                refScrollView.scrollTo({
+                  x:
+                    (TimeHeaderWidth / parseInt(1440)) *
+                    (new Date().getHours() * 60 + parseInt(new Date().getMinutes())),
+                });
+              }}
+            >
+              <View
+                style={styles.tvGuideItemHeight}
+                onLayout={(event) => {
+                  var { width } = event.nativeEvent.layout;
+                  setTimeHeaderWidth(width);
+                }}
+              >
                 <View style={{ flexDirection: 'row', height: 20, backgroundColor: '#f03060' }}>
-                  {DisplayTimesList()}
+                  {timesList().map((item) => {
+                    return (
+                      <Text style={{ ...styles.timesListStyle, width: 200 }}>{item.time}</Text>
+                    );
+                  })}
                 </View>
 
                 <View style={{ ...styles.tvGuideItemHeight }}>
-                  <DisplayTVGuideItems allBroadcasts={allBroads} />
+                  {GuideData.map((broadcast) => {
+                    return (
+                      <View
+                        style={{
+                          ...styles.tvGuideItemHeight,
+                          flexDirection: 'row',
+                          borderBottomWidth: 1,
+                          borderBottomColor: 'gray',
+                        }}
+                      >
+                        {broadcast.broadcasts.map((item) => {
+                          // console.log(item.starts_at);
+                          let first = item.starts_at.split(' ');
+                          let sec = first[1].split(':');
+                          // console.log(sec);
+                          // console.log('raehgiur');
+                          var out =
+                            (TimeHeaderWidth / parseInt(1440)) *
+                            (parseInt(sec[0]) * 60 + parseInt(sec[1]));
+                          return (
+                            <View
+                              style={{
+                                position: 'absolute',
+                                left: out,
+                                top: 0,
+                                width: 100,
+                                height: 60,
+                                backgroundColor: '#A60402',
+                                borderWidth: 1,
+                                borderRadius: 4,
+                              }}
+                            >
+                              <Text>{item.title}</Text>
+                            </View>
+                          );
+                        })}
+                      </View>
+                    );
+                  })}
                 </View>
               </View>
             </ScrollView>
@@ -109,6 +213,7 @@ function DisplayBroadcasts({ broadcast }) {
           height: item.rect.height,
           backgroundColor: '#A60402',
           borderWidth: 1,
+          borderRadius: 4,
         }}
       >
         <Text>{item.title}</Text>
@@ -145,12 +250,12 @@ function DisplayPublishers() {
 
 //Have the broadcast calculate a rect based on the date object that they have.
 const broad2Test = [
-  { title: 'broadtest11', rect: { x: 130, y: 0, width: 200, height: 60 } },
+  { title: 'broadtest11', rect: { x: 130, y: -1, width: 200, height: 61 } },
   { title: 'broadtest12', rect: { x: 470, y: 0, width: 200, height: 60 } },
 ];
 
 const broad1Test = [
-  { title: 'broadtest1', rect: { x: 100, y: 0, width: 200, height: 60 } },
+  { title: 'broadtest1', startTime: '', rect: { x: 100, y: 0, width: 200, height: 60 } },
   { title: 'broadtest2', rect: { x: 400, y: 0, width: 200, height: 60 } },
   { title: 'broadtest3', rect: { x: 1000, y: 0, width: 200, height: 60 } },
 ];
