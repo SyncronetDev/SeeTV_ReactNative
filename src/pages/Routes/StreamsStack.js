@@ -1,13 +1,12 @@
-import Header from './Header';
-import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Text } from 'react-native';
-import { Streams, Create } from '../Streams';
+import React from 'react';
+import { Create, Streams } from '../Streams';
+import Header from './Header';
 
 const Stack = createStackNavigator();
 
 export default function StreamsStack() {
-  //screenOptions={Header(navigation)}
+  // screenOptions={Header(navigation)}
   return (
     <Stack.Navigator
       headerMode="screen"
